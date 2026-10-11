@@ -1,18 +1,18 @@
-# ATS066 — CGOA: Related Practices
+# Related Practices (ATS066)
 
-Preparation for the **Related Practices** domain of **Certified GitOps Associate (CGOA)**.
-The published domain weight is **16%**. This repository belongs to
-the [ATP013 training path](https://github.com/astrona-io/ATP013).
+Certified GitOps Associate (CGOA): Related Practices, worth 16% of the official curriculum. This course belongs to ATP013.
 
-**Status:** Preparation scaffold; content authoring has not started.
+Developed reading explains mechanisms, responsible components, examples and limits. Every section has an introduction and every module closes with a summary. Reusable YAML checks contain 5–15 questions per bank. Technical content remains draft. No labs or playgrounds are included.
 
-The initial commit reserves the curriculum structure. Lessons, playgrounds,
-labs and assessments are planned and are not ready for learner use.
+## Course Outline
 
-See [CURRICULUM.md](CURRICULUM.md) for the objective map and authoring checklist,
-[astrona.yaml](astrona.yaml) for the course manifest, and
-[CLAUDE.md](CLAUDE.md) for writing and environment rules.
+| Section / module | Module | Teaching files |
+| --- | --- | --- |
+| 010 / 01 | Rolling Updates And Availability | Rolling Updates And Health Gates; Calculating Rollout Capacity And Diagnosing Progress |
+| 020 / 01 | Infrastructure Declarations, Plans And External Resource Lifecycle | Infrastructure Declarations, Plans And External Resource Lifecycle |
+| 030 / 01 | Shared Ownership, Feedback And Platform Enablement | Shared Ownership, Feedback And Platform Enablement |
+| 040 / 01 | Build And Release Pipelines | Source Changes And Build Evidence; Delivery, Deployment And Promotion Decisions |
 
-Curriculum source: [official CGOA page](https://training.linuxfoundation.org/certification/certified-gitops-associate-cgoa/), checked 2026-10-10.
-License: [Apache-2.0](LICENSE). Curriculum objectives retain attribution to
-The Linux Foundation and CNCF; see [CNCF curriculum licensing](https://github.com/cncf/curriculum).
+## Author Review
+
+See [curriculum coverage](CURRICULUM.md), [primary sources](SOURCES.md), [question-bank documentation](ASSESSMENTS.md) and [contribution instructions](CONTRIBUTING.md). No runtime execution is claimed.
