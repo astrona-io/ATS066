@@ -1,0 +1,108 @@
+version: 1
+approval: CGOA requested 2026-10-11; established reading-only scope
+course:
+  id: ATS066
+  certification:
+    name: Certified GitOps Associate
+    code: CGOA
+    provider: CNCF / Linux Foundation
+    domain: Related Practices
+    weight: 16
+    competencies:
+    - Configuration as Code (CaC)
+    - Infrastructure as Code (IaC)
+    - DevOps and DevSecOps
+    - CI and CD
+defaults:
+  playground: false
+  module_lab: false
+  capstone: false
+  section_quiz: false
+  final_quiz: true
+assessment_format: YAML question banks v1, registered in assessments/index.yaml
+sections:
+- id: section-010
+  title: Configuration as Code (CaC)
+  curriculum_item: Configuration as Code (CaC)
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Rolling Updates And Availability
+    objectives:
+    - Identify changes that create Deployment revisions.
+    - Calculate surge and unavailability limits.
+    - Explain readiness and capacity effects on rollout.
+    - Distinguish reported progress failure from automatic recovery.
+    - Distinguish configuration as code from infrastructure provisioning and ongoing reconciliation.
+    outline:
+    - Rolling Updates And Health Gates
+    - Calculating Rollout Capacity And Diagnosing Progress
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+      adapted_from: ATS001/sections/section-020/module-03/course-01-rolling-updates-and-health-gates.md
+    - reading: sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+      adapted_from: ATS001/sections/section-020/module-03/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+- id: section-020
+  title: Infrastructure as Code (IaC)
+  curriculum_item: Infrastructure as Code (IaC)
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Infrastructure Declarations, Plans And External Resource Lifecycle
+    objectives:
+    - Distinguish infrastructure as code from application configuration.
+    - Explain provider state, plan review and lifecycle risks.
+    - Assess how an infrastructure workflow maps to GitOps principles.
+    outline:
+    - Infrastructure Declarations, Plans And External Resource Lifecycle
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-020/module-01/course-01-infrastructure-declarations-plans-and-external-resource-lifecycle.md
+      adapted_from: null
+- id: section-030
+  title: DevOps and DevSecOps
+  curriculum_item: DevOps and DevSecOps
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Shared Ownership, Feedback And Platform Enablement
+    objectives:
+    - Explain DevOps and DevSecOps as collaborative practices.
+    - Distinguish platform enablement from transferring every responsibility.
+    - Reason about feedback, security and supported service boundaries.
+    outline:
+    - Shared Ownership, Feedback And Platform Enablement
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-030/module-01/course-01-shared-ownership-feedback-and-platform-enablement.md
+      adapted_from: null
+- id: section-040
+  title: CI and CD
+  curriculum_item: CI and CD
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Build And Release Pipelines
+    objectives:
+    - Trace source changes through build, checks and artifact publication.
+    - Explain what continuous integration checks.
+    - Distinguish continuous delivery from continuous deployment.
+    - Relate release identity to an immutable artifact.
+    outline:
+    - Source Changes And Build Evidence
+    - Delivery, Deployment And Promotion Decisions
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
+      adapted_from: ATS039/sections/section-010/module-01/course-01-source-changes-and-build-evidence.md
+    - reading: sections/section-040/module-01/course-02-delivery-deployment-and-promotion-decisions.md
+      adapted_from: ATS039/sections/section-010/module-01/course-02-delivery-deployment-and-promotion-decisions.md
