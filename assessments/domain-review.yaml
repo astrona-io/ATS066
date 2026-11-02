@@ -1,0 +1,245 @@
+schema_version: 1
+kind: question_bank
+id: ats066-domain-review
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: domain
+  id: domain-review
+  title: Related Practices
+placement:
+  position: after
+  reading: sections/section-040/module-01/course-03-summary.md
+questions:
+- id: ats066-domain-review-q01
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish configuration as code from infrastructure provisioning and ongoing reconciliation.
+  source_readings:
+  - sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+  prompt: Does a versioned configuration file alone establish continuous reconciliation?
+  options:
+  - id: a
+    text: Yes; every committed file runs itself.
+    explanation: A consumer must implement management.
+  - id: b
+    text: Yes; every setting automatically becomes public.
+    explanation: Access policy remains a separate concern.
+  - id: c
+    text: No; an active management process is also needed.
+    explanation: Storage does not supply the ongoing control loop.
+  correct_option: c
+  explanation: Storage does not supply the ongoing control loop.
+- id: ats066-domain-review-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain readiness and capacity effects on rollout.
+  source_readings:
+  - sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+  prompt: A zero-unavailable rollout cannot schedule its surge Pod. Which constraint is relevant?
+  options:
+  - id: a
+    text: Whether Helm has a longer release name
+    explanation: Release naming does not free node allocation.
+  - id: b
+    text: Capacity for replacement work while old capacity remains available
+    explanation: The budget can require extra runnable capacity before reducing old replicas.
+  - id: c
+    text: The Ingress host string alone
+    explanation: Host routing does not supply scheduling capacity.
+  correct_option: b
+  explanation: The budget can require extra runnable capacity before reducing old replicas.
+- id: ats066-domain-review-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify changes that create Deployment revisions.
+  source_readings:
+  - sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+  prompt: Which change normally starts a Deployment template rollout?
+  options:
+  - id: a
+    text: Changing the container image in the Pod template
+    explanation: A template change creates a new desired replica template and revision.
+  - id: b
+    text: Only reading the Deployment status
+    explanation: Inspection does not mutate the desired workload.
+  - id: c
+    text: Only changing an unrelated ConfigMap object
+    explanation: An external object update does not inherently change the Deployment template.
+  correct_option: a
+  explanation: A template change creates a new desired replica template and revision.
+- id: ats066-domain-review-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish infrastructure as code from application configuration.
+  source_readings:
+  - sections/section-020/module-01/course-01-infrastructure-declarations-plans-and-external-resource-lifecycle.md
+  prompt: Is every IaC workflow automatically GitOps?
+  options:
+  - id: a
+    text: Yes; any configuration file satisfies all principles.
+    explanation: File storage is only one property.
+  - id: b
+    text: No; IaC can never be declarative.
+    explanation: Many IaC inputs are declarative.
+  - id: c
+    text: No; pull and continuous reconciliation must also be assessed.
+    explanation: A versioned apply job can lack ongoing management.
+  correct_option: c
+  explanation: A versioned apply job can lack ongoing management.
+- id: ats066-domain-review-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain provider state, plan review and lifecycle risks.
+  source_readings:
+  - sections/section-020/module-01/course-01-infrastructure-declarations-plans-and-external-resource-lifecycle.md
+  prompt: Why review a proposed infrastructure destruction carefully?
+  options:
+  - id: a
+    text: A plan automatically backs up all data.
+    explanation: Planning is not data recovery.
+  - id: b
+    text: It can remove durable resources and data relationships.
+    explanation: Lifecycle changes have operational consequences.
+  - id: c
+    text: Deleting infrastructure only changes a browser icon.
+    explanation: It changes real resources.
+  correct_option: b
+  explanation: Lifecycle changes have operational consequences.
+- id: ats066-domain-review-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Assess how an infrastructure workflow maps to GitOps principles.
+  source_readings:
+  - sections/section-020/module-01/course-01-infrastructure-declarations-plans-and-external-resource-lifecycle.md
+  prompt: Why protect provider state?
+  options:
+  - id: a
+    text: It can contain sensitive values and resource-management information.
+    explanation: State has access and integrity requirements.
+  - id: b
+    text: It is always public harmless prose.
+    explanation: Contents can be sensitive.
+  - id: c
+    text: It replaces every desired-state declaration.
+    explanation: Intent and provider observation have distinct roles.
+  correct_option: a
+  explanation: State has access and integrity requirements.
+- id: ats066-domain-review-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain DevOps and DevSecOps as collaborative practices.
+  source_readings:
+  - sections/section-030/module-01/course-01-shared-ownership-feedback-and-platform-enablement.md
+  prompt: What is a useful DevOps goal for a platform?
+  options:
+  - id: a
+    text: Remove all application-team responsibility.
+    explanation: Domain decisions remain with application owners.
+  - id: b
+    text: Measure success only by installed tools.
+    explanation: Tools do not establish outcomes.
+  - id: c
+    text: Help teams deliver and operate changes through shared feedback and responsibility.
+    explanation: The practice concerns collaboration and outcomes.
+  correct_option: c
+  explanation: The practice concerns collaboration and outcomes.
+- id: ats066-domain-review-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish platform enablement from transferring every responsibility.
+  source_readings:
+  - sections/section-030/module-01/course-01-shared-ownership-feedback-and-platform-enablement.md
+  prompt: How should security fit the delivery lifecycle?
+  options:
+  - id: a
+    text: Only as a browser color.
+    explanation: Presentation does not enforce controls.
+  - id: b
+    text: Through appropriate controls and feedback throughout the lifecycle.
+    explanation: A final scan alone leaves earlier boundaries uncovered.
+  - id: c
+    text: Only after every production incident.
+    explanation: That delays prevention and feedback.
+  correct_option: b
+  explanation: A final scan alone leaves earlier boundaries uncovered.
+- id: ats066-domain-review-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Reason about feedback, security and supported service boundaries.
+  source_readings:
+  - sections/section-030/module-01/course-01-shared-ownership-feedback-and-platform-enablement.md
+  prompt: What should a platform service boundary clarify?
+  options:
+  - id: a
+    text: What the platform provides and what its users still own.
+    explanation: Clear responsibility makes failures actionable.
+  - id: b
+    text: That every error belongs to the user automatically.
+    explanation: That creates an unhelpful ownership gap.
+  - id: c
+    text: That no capability needs an operator.
+    explanation: Services still need operation.
+  correct_option: a
+  explanation: Clear responsibility makes failures actionable.
+- id: ats066-domain-review-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Relate release identity to an immutable artifact.
+  source_readings:
+  - sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
+  prompt: Staging tested digest A, but production rebuilt the same source into digest B. What should a
+    release reviewer question?
+  options:
+  - id: a
+    text: Whether both Pods share a display name.
+    explanation: Names are not artifact identity evidence.
+  - id: b
+    text: Whether CI can ever run automatically.
+    explanation: Automation is not the uncertainty in the described promotion.
+  - id: c
+    text: Whether staging evidence applies to the actual production artifact.
+    explanation: A new build can differ even with the same source revision.
+  correct_option: c
+  explanation: A new build can differ even with the same source revision.
+- id: ats066-domain-review-q11
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Trace source changes through build, checks and artifact publication.
+  source_readings:
+  - sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
+  prompt: A team tested one image, then rebuilt from the same source before production. What important
+    uncertainty remains?
+  options:
+  - id: a
+    text: Testing the source automatically publishes every future image.
+    explanation: Testing and registry publication are different stages.
+  - id: b
+    text: The deployed artifact may differ because build inputs changed.
+    explanation: Source equality alone does not pin dependencies, tools or base images.
+  - id: c
+    text: The tested and deployed bytes must be identical.
+    explanation: A rebuild can resolve different inputs.
+  correct_option: b
+  explanation: Source equality alone does not pin dependencies, tools or base images.
+- id: ats066-domain-review-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what continuous integration checks.
+  source_readings:
+  - sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
+  prompt: A pipeline passes unit tests but has no checks of production dependencies. What can be concluded?
+  options:
+  - id: a
+    text: The configured unit checks passed, but other behavior remains unverified.
+    explanation: Evidence is bounded by the checks actually performed.
+  - id: b
+    text: The application cannot contain any defect.
+    explanation: Passing selected checks is not complete correctness proof.
+  - id: c
+    text: Every production operation is guaranteed correct.
+    explanation: Those operations were not all tested.
+  correct_option: a
+  explanation: Evidence is bounded by the checks actually performed.
