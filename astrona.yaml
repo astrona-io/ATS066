@@ -35,7 +35,7 @@ modules:
 - id: module-010
   title: Configuration as Code (CaC)
   description: Developed reading and reasoning for Configuration as Code (CaC).
-  draft: true
+  status: alpha
   content:
   - type: reading
     title: Configuration as Code (CaC)
@@ -55,7 +55,7 @@ modules:
 - id: module-020
   title: Infrastructure as Code (IaC)
   description: Developed reading and reasoning for Infrastructure as Code (IaC).
-  draft: true
+  status: alpha
   content:
   - type: reading
     title: Infrastructure as Code (IaC)
@@ -72,7 +72,7 @@ modules:
 - id: module-030
   title: DevOps and DevSecOps
   description: Developed reading and reasoning for DevOps and DevSecOps.
-  draft: true
+  status: alpha
   content:
   - type: reading
     title: DevOps and DevSecOps
@@ -89,7 +89,7 @@ modules:
 - id: module-040
   title: CI and CD
   description: Developed reading and reasoning for CI and CD.
-  draft: true
+  status: alpha
   content:
   - type: reading
     title: CI and CD
