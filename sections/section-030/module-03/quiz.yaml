@@ -1,0 +1,236 @@
+# Knowledge check for module section-030/module-03. Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats066-030-m03
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "DevOps and DevSecOps"
+placement:
+  position: after
+  reading: sections/section-030/module-03/course-05-summary.md
+questions:
+- id: ats066-030-m03-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define DevOps"
+  source_readings:
+  - sections/section-030/module-03/course-01-devops-goals-and-working-agreements.md
+  prompt: "Which statement describes DevOps?"
+  options:
+  - id: a
+    text: "Shared ownership of a service from commit to production, to deliver small changes often and safely."
+    explanation: "Correct. DevOps is a way of working that joins building and running a service."
+  - id: b
+    text: "A job title for the person who runs the servers."
+    explanation: "Not correct. DevOps is a way of working, not a role."
+  - id: c
+    text: "A tool that deploys containers."
+    explanation: "Not correct. Tools support DevOps but do not define it."
+  - id: d
+    text: "A separate team that approves every release."
+    explanation: "Not correct. That separates ownership instead of sharing it."
+  correct_option: a
+  explanation: "DevOps is a way of working that joins building and running a service."
+- id: ats066-030-m03-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the CALMS parts"
+  source_readings:
+  - sections/section-030/module-03/course-01-devops-goals-and-working-agreements.md
+  prompt: "What does the M in CALMS stand for?"
+  options:
+  - id: a
+    text: "Monitoring"
+    explanation: "Not correct. The model names measurement, not monitoring alone."
+  - id: b
+    text: "Measurement"
+    explanation: "Correct. CALMS stands for culture, automation, lean, measurement and sharing."
+  - id: c
+    text: "Management"
+    explanation: "Not correct. Management is not one of the five parts."
+  - id: d
+    text: "Migration"
+    explanation: "Not correct. Migration is not one of the five parts."
+  correct_option: b
+  explanation: "CALMS stands for culture, automation, lean, measurement and sharing."
+- id: ats066-030-m03-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain shifting left"
+  source_readings:
+  - sections/section-030/module-03/course-01-devops-goals-and-working-agreements.md
+  prompt: "What does shifting left mean in DevSecOps?"
+  options:
+  - id: a
+    text: "Moving all security checks to production only."
+    explanation: "Not correct. That is the opposite direction."
+  - id: b
+    text: "Removing security checks to deliver faster."
+    explanation: "Not correct. Shifting left adds checks early."
+  - id: c
+    text: "Moving security checks earlier in the delivery path, while keeping the later ones."
+    explanation: "Correct. An early check gives a faster and cheaper signal, and later checks still catch what slipped through."
+  - id: d
+    text: "Giving the security team sole ownership."
+    explanation: "Not correct. DevSecOps shares the duty."
+  correct_option: c
+  explanation: "An early check gives a faster and cheaper signal, and later checks still catch what slipped through."
+- id: ats066-030-m03-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define a feedback loop"
+  source_readings:
+  - sections/section-030/module-03/course-02-feedback-loops-and-signals.md
+  prompt: "What is a feedback loop in delivery?"
+  options:
+  - id: a
+    text: "A rule that every change needs a second review."
+    explanation: "Not correct. That is a review practice."
+  - id: b
+    text: "A graph of CPU use."
+    explanation: "Not correct. A graph can be a signal but is not the loop."
+  - id: c
+    text: "A retry of a failed Job."
+    explanation: "Not correct. A retry is a mechanism, not the feedback measure."
+  - id: d
+    text: "The time from a change to a clear signal about its result."
+    explanation: "Correct. A shorter loop means a problem is found closer to its cause."
+  correct_option: d
+  explanation: "A shorter loop means a problem is found closer to its cause."
+- id: ats066-030-m03-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Record why a change was made"
+  source_readings:
+  - sections/section-030/module-03/course-02-feedback-loops-and-signals.md
+  prompt: "Which annotation lets `kubectl rollout history` show the reason for a revision?"
+  options:
+  - id: a
+    text: "`kubernetes.io/change-cause`"
+    explanation: "Correct. Without a recorded change cause, the history shows only a revision number."
+  - id: b
+    text: "`kubernetes.io/revision-reason`"
+    explanation: "Not correct. This annotation does not exist."
+  - id: c
+    text: "`app.kubernetes.io/owner`"
+    explanation: "Not correct. This is not a rollout annotation."
+  - id: d
+    text: "`deployment.kubernetes.io/note`"
+    explanation: "Not correct. This annotation does not exist."
+  correct_option: a
+  explanation: "Without a recorded change cause, the history shows only a revision number."
+- id: ats066-030-m03-q06
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "List the four key metrics"
+  source_readings:
+  - sections/section-030/module-03/course-03-measuring-delivery-with-four-key-metrics.md
+  prompt: "Which list names the four key delivery metrics?"
+  options:
+  - id: a
+    text: "CPU use, memory use, disk use and network use."
+    explanation: "Not correct. These are resource metrics."
+  - id: b
+    text: "Deployment frequency, lead time for changes, change failure rate and time to restore service."
+    explanation: "Correct. Two metrics measure speed and two measure stability."
+  - id: c
+    text: "Lines of code, commits, pull requests and tickets."
+    explanation: "Not correct. These measure activity and not delivery outcomes."
+  - id: d
+    text: "Uptime, latency, traffic and saturation."
+    explanation: "Not correct. These are service signals and not the four key metrics."
+  correct_option: b
+  explanation: "Two metrics measure speed and two measure stability."
+- id: ats066-030-m03-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Separate speed from stability"
+  source_readings:
+  - sections/section-030/module-03/course-03-measuring-delivery-with-four-key-metrics.md
+  prompt: "Which metric measures stability and not speed?"
+  options:
+  - id: a
+    text: "Deployment frequency"
+    explanation: "Not correct. This measures how often changes reach production."
+  - id: b
+    text: "Lead time for changes"
+    explanation: "Not correct. This measures time from commit to production."
+  - id: c
+    text: "Change failure rate"
+    explanation: "Correct. Change failure rate and time to restore service are the stability pair."
+  - id: d
+    text: "Number of commits per week"
+    explanation: "Not correct. This is not one of the four metrics."
+  correct_option: c
+  explanation: "Change failure rate and time to restore service are the stability pair."
+- id: ats066-030-m03-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Use metrics correctly"
+  source_readings:
+  - sections/section-030/module-03/course-03-measuring-delivery-with-four-key-metrics.md
+  prompt: "What is a correct use of the four key metrics?"
+  options:
+  - id: a
+    text: "Rank individual engineers by their deployment count."
+    explanation: "Not correct. The metrics describe a system and must not rank people."
+  - id: b
+    text: "Set a target and reward the team for hitting it by any means."
+    explanation: "Not correct. A target on the number invites gaming it."
+  - id: c
+    text: "Replace incident reviews."
+    explanation: "Not correct. The numbers do not explain causes."
+  - id: d
+    text: "Compare a team with its own past to see whether delivery is improving."
+    explanation: "Correct. Medians over a period, read for trend, help a team improve without blaming anyone."
+  correct_option: d
+  explanation: "Medians over a period, read for trend, help a team improve without blaming anyone."
+- id: ats066-030-m03-q09
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Describe a blameless review"
+  source_readings:
+  - sections/section-030/module-03/course-04-blameless-reviews-ownership-and-runbooks.md
+  prompt: "What does a blameless review look for?"
+  options:
+  - id: a
+    text: "Causes in the system, with a timeline and tracked actions that change it."
+    explanation: "Correct. People act on what the system lets them do, so the system is where the fix belongs."
+  - id: b
+    text: "The person who made the mistake."
+    explanation: "Not correct. Naming a person as the cause is what the review avoids."
+  - id: c
+    text: "A way to prove that the incident was unavoidable."
+    explanation: "Not correct. The aim is learning and change."
+  - id: d
+    text: "A list of tools to buy."
+    explanation: "Not correct. Actions follow from the causes, not from a shopping list."
+  correct_option: a
+  explanation: "People act on what the system lets them do, so the system is where the fix belongs."
+- id: ats066-030-m03-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Make ownership queryable"
+  source_readings:
+  - sections/section-030/module-03/course-04-blameless-reviews-ownership-and-runbooks.md
+  prompt: "Why does a team put an `owner` label on workloads instead of only an annotation?"
+  options:
+  - id: a
+    text: "Annotations are not stored by the API server."
+    explanation: "Not correct. Annotations are stored."
+  - id: b
+    text: "Selectors match labels, so a query can find everything a team owns."
+    explanation: "Correct. Labels are matched by selectors and annotations are not, so ownership that must be queried belongs in labels."
+  - id: c
+    text: "Labels are encrypted and annotations are not."
+    explanation: "Not correct. Neither is encrypted."
+  - id: d
+    text: "Labels start a pod on the right node."
+    explanation: "Not correct. Placement uses other fields."
+  correct_option: b
+  explanation: "Labels are matched by selectors and annotations are not, so ownership that must be queried belongs in labels."

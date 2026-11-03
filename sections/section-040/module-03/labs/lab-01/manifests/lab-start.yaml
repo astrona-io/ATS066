@@ -1,0 +1,54 @@
+# Starting state: namespace launch with the blue version (two replicas) and
+# the Service scout that selects version blue. Green does not exist yet.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: launch
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scout-blue
+  namespace: launch
+  labels:
+    app: scout
+    version: blue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scout
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: scout
+        version: blue
+    spec:
+      containers:
+        - name: scout
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          env:
+            - name: PODINFO_UI_MESSAGE
+              value: blue release
+          ports:
+            - name: http
+              containerPort: 9898
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scout
+  namespace: launch
+spec:
+  selector:
+    app: scout
+    version: blue
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

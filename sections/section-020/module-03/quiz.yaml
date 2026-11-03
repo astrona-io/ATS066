@@ -1,0 +1,236 @@
+# Knowledge check for module section-020/module-03. Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats066-020-m03
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Infrastructure as Code"
+placement:
+  position: after
+  reading: sections/section-020/module-03/course-05-summary.md
+questions:
+- id: ats066-020-m03-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Tell declarative from imperative code"
+  source_readings:
+  - sections/section-020/module-03/course-01-declarative-and-imperative-infrastructure-code.md
+  prompt: "Which description fits declarative infrastructure code?"
+  options:
+  - id: a
+    text: "It states the result you want and the tool works out the steps."
+    explanation: "Correct. A declarative file describes the end state. The tool compares it with reality and plans the difference."
+  - id: b
+    text: "It lists every step in order and the tool runs them without checks."
+    explanation: "Not correct. That is an imperative script."
+  - id: c
+    text: "It can be run only from a web console."
+    explanation: "Not correct. Declarative code is stored in files."
+  - id: d
+    text: "It always replaces every resource on each run."
+    explanation: "Not correct. A declarative tool changes only what differs."
+  correct_option: a
+  explanation: "A declarative file describes the end state. The tool compares it with reality and plans the difference."
+- id: ats066-020-m03-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Recognise idempotence"
+  source_readings:
+  - sections/section-020/module-03/course-01-declarative-and-imperative-infrastructure-code.md
+  prompt: "Which command is idempotent?"
+  options:
+  - id: a
+    text: "`mkdir /tmp/outpost`"
+    explanation: "Not correct. The second run fails because the directory exists."
+  - id: b
+    text: "`mkdir -p /tmp/outpost`"
+    explanation: "Correct. `mkdir -p` succeeds whether or not the directory exists, so the end state is the same on every run."
+  - id: c
+    text: "`echo probe >> /tmp/outpost/log`"
+    explanation: "Not correct. Each run appends another line."
+  - id: d
+    text: "`kubectl create namespace outpost`"
+    explanation: "Not correct. The second run fails because the namespace exists."
+  correct_option: b
+  explanation: "`mkdir -p` succeeds whether or not the directory exists, so the end state is the same on every run."
+- id: ats066-020-m03-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read the result of a second apply"
+  source_readings:
+  - sections/section-020/module-03/course-01-declarative-and-imperative-infrastructure-code.md
+  prompt: "You run `tofu apply` twice with no code change in between. What should the second run report?"
+  options:
+  - id: a
+    text: "The same resources created again."
+    explanation: "Not correct. A declarative tool does not create what exists."
+  - id: b
+    text: "An error because the state file is locked."
+    explanation: "Not correct. The lock is released when the first run ends."
+  - id: c
+    text: "No changes, because the real infrastructure already matches the code."
+    explanation: "Correct. A second apply that reports no changes shows that the code is idempotent."
+  - id: d
+    text: "A full replacement of every resource."
+    explanation: "Not correct. Replacement happens only when a change forces it."
+  correct_option: c
+  explanation: "A second apply that reports no changes shows that the code is idempotent."
+- id: ats066-020-m03-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define mutable infrastructure"
+  source_readings:
+  - sections/section-020/module-03/course-02-mutable-and-immutable-infrastructure.md
+  prompt: "What is mutable infrastructure?"
+  options:
+  - id: a
+    text: "Resources are replaced from code for every change."
+    explanation: "Not correct. That is immutable infrastructure."
+  - id: b
+    text: "Resources that can never be modified."
+    explanation: "Not correct. That describes the opposite."
+  - id: c
+    text: "Resources that exist only in memory."
+    explanation: "Not correct. Mutability is about how change is made, not where it lives."
+  - id: d
+    text: "Running resources are changed in place after they are created."
+    explanation: "Correct. Mutable infrastructure is updated in place, which lets it drift away from the code over time."
+  correct_option: d
+  explanation: "Mutable infrastructure is updated in place, which lets it drift away from the code over time."
+- id: ats066-020-m03-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain what a container teaches about immutability"
+  source_readings:
+  - sections/section-020/module-03/course-02-mutable-and-immutable-infrastructure.md
+  prompt: "A file added to a running pod with `kubectl exec` is missing after the pod is replaced. Why?"
+  options:
+  - id: a
+    text: "The pod is built again from the image, which does not contain the file."
+    explanation: "Correct. Containers follow the immutable model: change the image, not the running container."
+  - id: b
+    text: "The API server deletes files that were not in a manifest."
+    explanation: "Not correct. The API server does not inspect container files."
+  - id: c
+    text: "The node removes files after one hour."
+    explanation: "Not correct. There is no such timer."
+  - id: d
+    text: "The file is copied to a backup that must be restored."
+    explanation: "Not correct. Nothing is backed up automatically."
+  correct_option: a
+  explanation: "Containers follow the immutable model: change the image, not the running container."
+- id: ats066-020-m03-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read a plan symbol"
+  source_readings:
+  - sections/section-020/module-03/course-02-mutable-and-immutable-infrastructure.md
+  prompt: "In an OpenTofu plan, a line for a resource starts with `-/+` and says `forces replacement`. What will apply do?"
+  options:
+  - id: a
+    text: "Update the resource in place."
+    explanation: "Not correct. An in-place update is marked with `~`."
+  - id: b
+    text: "Destroy the resource and create a new one."
+    explanation: "Correct. `-/+` means destroy then create, and the attribute that forces it is named in the plan."
+  - id: c
+    text: "Leave the resource alone."
+    explanation: "Not correct. No change has no marker."
+  - id: d
+    text: "Only add a tag to the resource."
+    explanation: "Not correct. A tag change would not force replacement."
+  correct_option: b
+  explanation: "`-/+` means destroy then create, and the attribute that forces it is named in the plan."
+- id: ats066-020-m03-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain what a CRD adds"
+  source_readings:
+  - sections/section-020/module-03/course-03-kubernetes-as-an-infrastructure-control-plane.md
+  prompt: "What does a CustomResourceDefinition add to a cluster?"
+  options:
+  - id: a
+    text: "A controller that creates cloud resources."
+    explanation: "Not correct. A CRD only defines the kind; a controller must be installed."
+  - id: b
+    text: "A new node for the cluster."
+    explanation: "Not correct. Nodes are unrelated to CRDs."
+  - id: c
+    text: "A new kind of object with a schema that the API server validates."
+    explanation: "Correct. A CRD extends the API. Without a controller, objects of the new kind are only stored data."
+  - id: d
+    text: "A new namespace for the objects."
+    explanation: "Not correct. Namespaces are separate objects."
+  correct_option: c
+  explanation: "A CRD extends the API. Without a controller, objects of the new kind are only stored data."
+- id: ats066-020-m03-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain the role of a controller"
+  source_readings:
+  - sections/section-020/module-03/course-03-kubernetes-as-an-infrastructure-control-plane.md
+  prompt: "A `Bay` object exists but nothing happens in the cluster. What is the most likely cause?"
+  options:
+  - id: a
+    text: "The API server rejected the object silently."
+    explanation: "Not correct. A rejected object would not exist."
+  - id: b
+    text: "The object needs a restart of the API server."
+    explanation: "Not correct. The API server serves new kinds without restart."
+  - id: c
+    text: "Custom objects can never do anything."
+    explanation: "Not correct. Objects act through a controller that reconciles them."
+  - id: d
+    text: "No controller is running that reads `Bay` objects."
+    explanation: "Correct. A controller turns desired state in the object into real state. Without it, the object is data."
+  correct_option: d
+  explanation: "A controller turns desired state in the object into real state. Without it, the object is data."
+- id: ats066-020-m03-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Place the plan in a safe change flow"
+  source_readings:
+  - sections/section-020/module-03/course-04-reviewing-testing-and-securing-infrastructure-changes.md
+  prompt: "What is the purpose of saving a plan with `tofu plan -out=<file>` before an apply?"
+  options:
+  - id: a
+    text: "The apply then runs exactly what was reviewed."
+    explanation: "Correct. A saved plan can be reviewed and checked by policy, and apply uses that plan without a second calculation."
+  - id: b
+    text: "It makes the apply faster by skipping validation."
+    explanation: "Not correct. The saved plan is about repeatability."
+  - id: c
+    text: "It removes secrets from the state file."
+    explanation: "Not correct. The plan does not change the state."
+  - id: d
+    text: "It locks the code repository."
+    explanation: "Not correct. A plan file does not lock anything."
+  correct_option: a
+  explanation: "A saved plan can be reviewed and checked by policy, and apply uses that plan without a second calculation."
+- id: ats066-020-m03-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Protect the state file"
+  source_readings:
+  - sections/section-020/module-03/course-04-reviewing-testing-and-securing-infrastructure-changes.md
+  prompt: "Why must the state file be kept out of Git?"
+  options:
+  - id: a
+    text: "It is too small to be stored in Git."
+    explanation: "Not correct. Size is not the concern."
+  - id: b
+    text: "It can hold sensitive values, including ones marked `sensitive = true`."
+    explanation: "Correct. `sensitive = true` hides a value from output but not from the state, so the state needs an encrypted, locked, access controlled backend."
+  - id: c
+    text: "Git cannot store JSON files."
+    explanation: "Not correct. Git stores any text."
+  - id: d
+    text: "The state file is rebuilt on every run."
+    explanation: "Not correct. The state is the record the tool relies on."
+  correct_option: b
+  explanation: "`sensitive = true` hides a value from output but not from the state, so the state needs an encrypted, locked, access controlled backend."

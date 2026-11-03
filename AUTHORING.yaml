@@ -67,6 +67,26 @@ sections:
       adapted_from: 
     - reading: sections/section-010/module-02/course-03-kustomize-overlays-diff-and-drift.md
       adapted_from: 
+  - id: module-03
+    title: Declarative Configuration, Idempotence And Field Ownership
+    objectives:
+    - Cover the official competencies for this topic with original material.
+    outline:
+    - Imperative And Declarative Commands
+    - Desired State In Version Control
+    - Server-Side Apply And Field Ownership
+    - Templating And Packaging: Kustomize And Helm
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-010/module-03/course-01-imperative-and-declarative-commands.md
+      adapted_from: 
+    - reading: sections/section-010/module-03/course-02-desired-state-in-version-control.md
+      adapted_from: 
+    - reading: sections/section-010/module-03/course-03-server-side-apply-and-field-ownership.md
+      adapted_from: 
+    - reading: sections/section-010/module-03/course-04-templating-and-packaging-kustomize-and-helm.md
+      adapted_from: 
 - id: section-020
   title: Infrastructure as Code (IaC)
   curriculum_item: Infrastructure as Code (IaC)
@@ -104,6 +124,26 @@ sections:
     - reading: sections/section-020/module-02/course-01-state-drift-and-detection.md
       adapted_from: 
     - reading: sections/section-020/module-02/course-02-importing-resources-and-the-gitops-boundary.md
+      adapted_from: 
+  - id: module-03
+    title: Infrastructure As Code Concepts, Immutability And Safe Change
+    objectives:
+    - Cover the official competencies for this topic with original material.
+    outline:
+    - Declarative And Imperative Infrastructure Code
+    - Mutable And Immutable Infrastructure
+    - Kubernetes As An Infrastructure Control Plane
+    - Reviewing, Testing And Securing Infrastructure Changes
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-020/module-03/course-01-declarative-and-imperative-infrastructure-code.md
+      adapted_from: 
+    - reading: sections/section-020/module-03/course-02-mutable-and-immutable-infrastructure.md
+      adapted_from: 
+    - reading: sections/section-020/module-03/course-03-kubernetes-as-an-infrastructure-control-plane.md
+      adapted_from: 
+    - reading: sections/section-020/module-03/course-04-reviewing-testing-and-securing-infrastructure-changes.md
       adapted_from: 
 - id: section-030
   title: DevOps and DevSecOps
@@ -143,6 +183,46 @@ sections:
       adapted_from: 
     - reading: sections/section-030/module-02/course-02-least-privilege-deployment-identities-and-secrets.md
       adapted_from: 
+  - id: module-03
+    title: DevOps Principles, Feedback And Measurement
+    objectives:
+    - Cover the official competencies for this topic with original material.
+    outline:
+    - DevOps Goals And Working Agreements
+    - Feedback Loops And Signals
+    - Measuring Delivery With Four Key Metrics
+    - Blameless Reviews, Ownership And Runbooks
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-030/module-03/course-01-devops-goals-and-working-agreements.md
+      adapted_from: 
+    - reading: sections/section-030/module-03/course-02-feedback-loops-and-signals.md
+      adapted_from: 
+    - reading: sections/section-030/module-03/course-03-measuring-delivery-with-four-key-metrics.md
+      adapted_from: 
+    - reading: sections/section-030/module-03/course-04-blameless-reviews-ownership-and-runbooks.md
+      adapted_from: 
+  - id: module-04
+    title: Software Supply Chain Security And Admission Policy
+    objectives:
+    - Cover the official competencies for this topic with original material.
+    outline:
+    - The Software Supply Chain And Its Attack Points
+    - Image References: Tags, Digests And Pull Policy
+    - Admission Policy With ValidatingAdmissionPolicy
+    - Policy As Code And Pipeline Checks
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-030/module-04/course-01-the-software-supply-chain-and-its-attack-points.md
+      adapted_from: 
+    - reading: sections/section-030/module-04/course-02-image-references-tags-digests-and-pull-policy.md
+      adapted_from: 
+    - reading: sections/section-030/module-04/course-03-admission-policy-with-validatingadmissionpolicy.md
+      adapted_from: 
+    - reading: sections/section-030/module-04/course-04-policy-as-code-and-pipeline-checks.md
+      adapted_from: 
 - id: section-040
   title: CI and CD
   curriculum_item: CI and CD
@@ -180,4 +260,24 @@ sections:
     - reading: sections/section-040/module-02/course-01-promoting-one-artifact-through-environments.md
       adapted_from: 
     - reading: sections/section-040/module-02/course-02-gates-rollback-and-pull-based-delivery.md
+      adapted_from: 
+  - id: module-03
+    title: CI/CD Concepts, Pipelines And Deployment Strategies
+    objectives:
+    - Cover the official competencies for this topic with original material.
+    outline:
+    - Continuous Integration, Delivery And Deployment
+    - Pipelines As Code
+    - Deployment Strategies
+    - CI/CD And GitOps Together
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-040/module-03/course-01-continuous-integration-delivery-and-deployment.md
+      adapted_from: 
+    - reading: sections/section-040/module-03/course-02-pipelines-as-code.md
+      adapted_from: 
+    - reading: sections/section-040/module-03/course-03-deployment-strategies.md
+      adapted_from: 
+    - reading: sections/section-040/module-03/course-04-ci-cd-and-gitops-together.md
       adapted_from: 

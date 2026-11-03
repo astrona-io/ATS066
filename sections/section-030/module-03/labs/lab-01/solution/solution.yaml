@@ -1,0 +1,60 @@
+# Reference objects for `astrona test`. The learner reaches the same state.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scout
+  namespace: ops
+  labels:
+    app: scout
+    app.kubernetes.io/part-of: starfleet
+    owner: scout-team
+  annotations:
+    runbook: runbooks/scout.md
+    kubernetes.io/change-cause: Show the ops banner message
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scout
+  template:
+    metadata:
+      labels:
+        app: scout
+    spec:
+      containers:
+        - name: scout
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          env:
+            - name: PODINFO_UI_MESSAGE
+              value: ops banner
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: probe
+  namespace: ops
+  labels:
+    app: probe
+    app.kubernetes.io/part-of: starfleet
+    owner: probe-team
+  annotations:
+    runbook: runbooks/probe.md
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: probe
+  template:
+    metadata:
+      labels:
+        app: probe
+    spec:
+      containers:
+        - name: probe
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898

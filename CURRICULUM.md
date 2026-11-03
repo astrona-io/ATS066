@@ -6,22 +6,27 @@ The [official objectives](https://training.linuxfoundation.org/certification/cer
 
 | Section | Official objective | Modules | Capstone lab | Quiz |
 | --- | --- | --- | --- | --- |
-| 010 | Configuration as Code (CaC) | 2 | Deliver A Configuration Change Safely | 12 questions |
-| 020 | Infrastructure as Code (IaC) | 2 | Bring A Hand-Made Depot Under OpenTofu | 6 questions |
-| 030 | DevOps and DevSecOps | 2 | Bring A Bay To A Safe Supported State | 6 questions |
-| 040 | CI and CD | 2 | Recover Production And Promote A Release With Evidence | 6 questions |
+| 010 | Configuration as Code (CaC) | 3 | Deliver A Configuration Change Safely | 12 questions |
+| 020 | Infrastructure as Code (IaC) | 3 | Bring A Hand-Made Depot Under OpenTofu | 6 questions |
+| 030 | DevOps and DevSecOps | 4 | Bring A Bay To A Safe Supported State | 6 questions |
+| 040 | CI and CD | 3 | Recover Production And Promote A Release With Evidence | 6 questions |
 
 | Section / module | Module | Reading parts |
 | --- | --- | --- |
 | 010 / 01 | Rolling Updates And Availability | Rolling Updates And Health Gates; Calculating Rollout Capacity And Diagnosing Progress; Rollback, History And Verification |
 | 010 / 02 | Configuration As Versioned Input | Configuration As Declared Input; How A Configuration Change Reaches Pods; Kustomize Overlays, Diff And Drift |
+| 010 / 03 | Declarative Configuration, Idempotence And Field Ownership | Imperative And Declarative Commands; Desired State In Version Control; Server-Side Apply And Field Ownership; Templating And Packaging: Kustomize And Helm |
 | 020 / 01 | Declarations, Plans And Resource Lifecycle | Declaring Resources With OpenTofu; Reading Plans, Replacement And Lifecycle Rules |
 | 020 / 02 | Drift, State And Reconciliation | State, Drift And Detection; Importing Resources And The GitOps Boundary |
+| 020 / 03 | Infrastructure As Code Concepts, Immutability And Safe Change | Declarative And Imperative Infrastructure Code; Mutable And Immutable Infrastructure; Kubernetes As An Infrastructure Control Plane; Reviewing, Testing And Securing Infrastructure Changes |
 | 030 / 01 | Shared Ownership, Feedback And Platform Enablement | Ownership Boundaries With Namespaces And RBAC; Supported Limits And Actionable Feedback |
 | 030 / 02 | Security Checks In The Delivery Path | Pod Security Admission And Security Contexts; Least-Privilege Deployment Identities And Secrets |
+| 030 / 03 | DevOps Principles, Feedback And Measurement | DevOps Goals And Working Agreements; Feedback Loops And Signals; Measuring Delivery With Four Key Metrics; Blameless Reviews, Ownership And Runbooks |
+| 030 / 04 | Software Supply Chain Security And Admission Policy | The Software Supply Chain And Its Attack Points; Image References: Tags, Digests And Pull Policy; Admission Policy With ValidatingAdmissionPolicy; Policy As Code And Pipeline Checks |
 | 040 / 01 | Build And Release Pipelines | Source Changes And Build Evidence; Delivery, Deployment And Release Identity |
 | 040 / 02 | Promotion, Delivery And Rollback | Promoting One Artifact Through Environments; Gates, Rollback And Pull-Based Delivery |
+| 040 / 03 | CI/CD Concepts, Pipelines And Deployment Strategies | Continuous Integration, Delivery And Deployment; Pipelines As Code; Deployment Strategies; CI/CD And GitOps Together |
 
-Each module has a playground and a graded lab. The final domain quiz has 16 questions, four for each section.
+Each module has a playground and a graded lab, and each of the five modules added later also has its own ten-question quiz. The final domain quiz has 26 questions across all four sections.
 
 AUTHORING.yaml records measurable goals and adaptation sources. Every objective retains its section ID. All technical readings remain draft. Question banks are listed in assessments/index.yaml and as quiz entries in astrona.yaml. The labs and playgrounds have been checked statically only; no runtime execution is claimed.

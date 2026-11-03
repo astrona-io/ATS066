@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Reject Mutable Image Tags With An Admission Policy (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-030-04
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create namespace dock with a scout Deployment that uses the tag latest
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the policy, label the namespace and repair the Deployment
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until two scout pods run the fixed image
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: policy-and-binding
+      description: The policy no-latest-tag and a binding of the same name exist, and the binding denies.
+      type: file
+      source: validation/validate-policy-and-binding.sh
+      hint: Create a ValidatingAdmissionPolicy and a ValidatingAdmissionPolicyBinding, both named no-latest-tag, and set validationActions to Deny.
+    - name: namespace-labelled
+      description: The namespace dock has the label supply-chain=checked.
+      type: file
+      source: validation/validate-namespace-labelled.sh
+      hint: The binding selects namespaces by the label supply-chain=checked. Label the namespace dock.
+    - name: latest-rejected-tagged-accepted
+      description: A Deployment with the tag latest is rejected and one with a version tag is accepted, both in dock.
+      type: file
+      source: validation/validate-latest-rejected-tagged-accepted.sh
+      hint: Test with kubectl create deployment --dry-run=server. Check the CEL expression and the namespace label if the wrong answer comes back.
+    - name: scout-repaired
+      description: Scout runs two available replicas with the image ghcr.io/stefanprodan/podinfo:6.15.0.
+      type: file
+      source: validation/validate-scout-repaired.sh
+      hint: Set the image to the fixed tag and keep two replicas. Wait for the rollout.
+
+teardown:
+  keepCluster: false

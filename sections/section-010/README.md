@@ -19,6 +19,7 @@ This section teaches you to deliver a change to a running service without losing
 - Roll back with `kubectl rollout undo` and verify the result.
 - Explain how a ConfigMap or a Secret reaches a pod, and why environment variables, volume files and `subPath` mounts behave differently.
 - Build a Kustomize base and overlay with a generated ConfigMap, preview with `kubectl diff -k` and find drift that an apply does not remove.
+- Tell declarative from imperative commands, use `kubectl diff` as a pipeline check and take over fields with server-side apply.
 
 ---
 
@@ -47,6 +48,19 @@ This section teaches you to deliver a change to a running service without losing
     astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-010/module-02/labs/lab-01
     astrona submit -c .
     ```
+
+### 3. Declarative Configuration, Idempotence And Field Ownership
+*   **Module Reader:** **[Module 3: Declarative Configuration, Idempotence And Field Ownership](./module-03/course.md)**
+*   **Hands-on Playground:** `sections/section-010/module-03/playground` - kind cluster. The Starfleet workloads run and no declared file exists for them, so you can compare create, apply and server-side apply.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-010/module-03/playground
+    ```
+*   **Lab:** `sections/section-010/module-03/labs/lab-01` (UNTESTED) - Take over objects made with `kubectl create` by using server-side apply.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-010/module-03/labs/lab-01
+    astrona submit -c .
+    ```
+*   **Module quiz:** 10 questions in `sections/section-010/module-03/quiz.yaml`. The pass score is 70 percent.
 
 ### Section Capstone Challenge
 *   **Comprehensive Challenge:** Deliver A Configuration Change Safely - `sections/section-010/capstone/labs/lab-01` (UNTESTED)

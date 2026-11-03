@@ -19,6 +19,7 @@ This section teaches you to describe infrastructure in OpenTofu files, read a pl
 - Detect drift with `tofu plan`, `-detailed-exitcode` and `-refresh-only`.
 - Adopt an existing object with an `import` block and prove that it was not recreated.
 - Explain how a push-based OpenTofu run differs from a continuous reconciliation agent.
+- Explain mutable and immutable infrastructure, declarative and imperative code, and how a CRD and a controller make Kubernetes a control plane.
 
 ---
 
@@ -47,6 +48,19 @@ This section teaches you to describe infrastructure in OpenTofu files, read a pl
     astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-020/module-02/labs/lab-01
     astrona submit -c .
     ```
+
+### 3. Infrastructure As Code Concepts, Immutability And Safe Change
+*   **Module Reader:** **[Module 3: Infrastructure As Code Concepts, Immutability And Safe Change](./module-03/course.md)**
+*   **Hands-on Playground:** `sections/section-020/module-03/playground` - kind cluster. The Starfleet workloads run and no OpenTofu file exists. You can test immutable fields and a custom resource.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-020/module-03/playground
+    ```
+*   **Lab:** `sections/section-020/module-03/labs/lab-01` (UNTESTED) - Replace a workload whose selector cannot be changed.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-020/module-03/labs/lab-01
+    astrona submit -c .
+    ```
+*   **Module quiz:** 10 questions in `sections/section-020/module-03/quiz.yaml`. The pass score is 70 percent.
 
 ### Section Capstone Challenge
 *   **Comprehensive Challenge:** Bring A Hand-Made Depot Under OpenTofu - `sections/section-020/capstone/labs/lab-01` (UNTESTED)

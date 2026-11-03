@@ -20,6 +20,7 @@ This section teaches you what a build pipeline proves and what it does not, how 
 - Promote one artifact through environments and keep the settings of each environment separate.
 - Gate a release with `kubectl rollout status --timeout`, roll back with `kubectl rollout undo` and say what a rollback restores.
 - Explain where the cluster credentials live in a push model and in a pull model.
+- Compare recreate, rolling, blue-green and canary deployments, and say how CI and a GitOps agent share the work.
 
 ---
 
@@ -48,6 +49,19 @@ This section teaches you what a build pipeline proves and what it does not, how 
     astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-040/module-02/labs/lab-01
     astrona submit -c .
     ```
+
+### 3. CI/CD Concepts, Pipelines And Deployment Strategies
+*   **Module Reader:** **[Module 3: CI/CD Concepts, Pipelines And Deployment Strategies](./module-03/course.md)**
+*   **Hands-on Playground:** `sections/section-040/module-03/playground` - kind cluster. The `launch` namespace runs `scout-blue` behind a Service that selects `version: blue`.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-040/module-03/playground
+    ```
+*   **Lab:** `sections/section-040/module-03/labs/lab-01` (UNTESTED) - Deploy green, switch the Service selector and keep blue for rollback.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-040/module-03/labs/lab-01
+    astrona submit -c .
+    ```
+*   **Module quiz:** 10 questions in `sections/section-040/module-03/quiz.yaml`. The pass score is 70 percent.
 
 ### Section Capstone Challenge
 *   **Comprehensive Challenge:** Recover Production And Promote A Release With Evidence - `sections/section-040/capstone/labs/lab-01` (UNTESTED)

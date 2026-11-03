@@ -1,0 +1,31 @@
+# Starting state: namespace dock with the Deployment scout that uses the
+# mutable tag latest. No admission policy exists and the namespace has no label.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dock
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scout
+  namespace: dock
+  labels:
+    app: scout
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scout
+  template:
+    metadata:
+      labels:
+        app: scout
+    spec:
+      containers:
+        - name: scout
+          image: ghcr.io/stefanprodan/podinfo:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9898

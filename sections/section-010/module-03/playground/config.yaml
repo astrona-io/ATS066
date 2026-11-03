@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Declarative Configuration, Idempotence And Field Ownership (PLAYGROUND) - playground environment.
+# A clean sandbox that starts and applies the example workloads, then stays
+# running for free exploration. No task, no grading, no `astrona submit`.
+# Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-playground-010-03
+  docs:
+    guide: docs/overview.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  manifests:
+    - name: starfleet
+      type: file
+      source: manifests/starfleet.yaml
+  waitFor:
+    - resource: deploy/scout
+      namespace: starfleet
+
+teardown:
+  keepCluster: false

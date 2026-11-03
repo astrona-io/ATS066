@@ -19,6 +19,7 @@ This section teaches you to turn shared ownership into objects that a cluster ca
 - Choose between the Pod Security modes enforce, audit and warn, and read a restricted-level violation.
 - Repair a pod specification with a security context, including a numeric `runAsUser`.
 - Limit a deployment identity with `resourceNames` and give a container a Secret by reference.
+- Explain the four key delivery metrics and blameless reviews, and reject mutable image tags with a ValidatingAdmissionPolicy.
 
 ---
 
@@ -47,6 +48,32 @@ This section teaches you to turn shared ownership into objects that a cluster ca
     astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-030/module-02/labs/lab-01
     astrona submit -c .
     ```
+
+### 3. DevOps Principles, Feedback And Measurement
+*   **Module Reader:** **[Module 3: DevOps Principles, Feedback And Measurement](./module-03/course.md)**
+*   **Hands-on Playground:** `sections/section-030/module-03/playground` - kind cluster. The Starfleet workloads run without owner labels or runbook annotations, so you can add them and read the rollout history.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-030/module-03/playground
+    ```
+*   **Lab:** `sections/section-030/module-03/labs/lab-01` (UNTESTED) - Add owner labels, runbook annotations and a recorded change cause.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-030/module-03/labs/lab-01
+    astrona submit -c .
+    ```
+*   **Module quiz:** 10 questions in `sections/section-030/module-03/quiz.yaml`. The pass score is 70 percent.
+
+### 4. Software Supply Chain Security And Admission Policy
+*   **Module Reader:** **[Module 4: Software Supply Chain Security And Admission Policy](./module-04/course.md)**
+*   **Hands-on Playground:** `sections/section-030/module-04/playground` - kind cluster. The `dock` namespace runs `scout` on the tag `latest`.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-030/module-04/playground
+    ```
+*   **Lab:** `sections/section-030/module-04/labs/lab-01` (UNTESTED) - Write a ValidatingAdmissionPolicy and a binding, label the namespace and repair `scout`.
+    ```bash
+    astrona run --git ssh://git@github.com/astrona-io/ATS066.git -c sections/section-030/module-04/labs/lab-01
+    astrona submit -c .
+    ```
+*   **Module quiz:** 10 questions in `sections/section-030/module-04/quiz.yaml`. The pass score is 70 percent.
 
 ### Section Capstone Challenge
 *   **Comprehensive Challenge:** Bring A Bay To A Safe Supported State - `sections/section-030/capstone/labs/lab-01` (UNTESTED)

@@ -1,0 +1,236 @@
+# Knowledge check for module section-010/module-03. Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats066-010-m03
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Configuration as Code"
+placement:
+  position: after
+  reading: sections/section-010/module-03/course-05-summary.md
+questions:
+- id: ats066-010-m03-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Tell declarative from imperative commands"
+  source_readings:
+  - sections/section-010/module-03/course-01-imperative-and-declarative-commands.md
+  prompt: "You run `kubectl create -f deployment-scout.yaml` twice. What happens the second time?"
+  options:
+  - id: a
+    text: "The command fails because the object already exists."
+    explanation: "Correct. `kubectl create` is imperative: it asks for a creation, and the API server refuses a name that is taken."
+  - id: b
+    text: "The command prints `unchanged` and exits with 0."
+    explanation: "Not correct. That is the result of `kubectl apply`, not `kubectl create`."
+  - id: c
+    text: "The command updates the object to match the file."
+    explanation: "Not correct. `create` never updates an existing object."
+  - id: d
+    text: "The command creates a second Deployment with a new name."
+    explanation: "Not correct. The name comes from the file, so a second object cannot exist."
+  correct_option: a
+  explanation: "`kubectl create` is imperative: it asks for a creation, and the API server refuses a name that is taken."
+- id: ats066-010-m03-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define idempotence"
+  source_readings:
+  - sections/section-010/module-03/course-01-imperative-and-declarative-commands.md
+  prompt: "Which statement describes an idempotent operation?"
+  options:
+  - id: a
+    text: "It always prints the same text."
+    explanation: "Not correct. Idempotence is about the resulting state, not the output."
+  - id: b
+    text: "Running it again with the same input leaves the system in the same state."
+    explanation: "Correct. An idempotent operation gives the same end state however many times it runs, which is why `kubectl apply` is safe in a pipeline."
+  - id: c
+    text: "It can run only once."
+    explanation: "Not correct. An idempotent operation can run many times safely."
+  - id: d
+    text: "It needs no credentials."
+    explanation: "Not correct. Credentials are unrelated to idempotence."
+  correct_option: b
+  explanation: "An idempotent operation gives the same end state however many times it runs, which is why `kubectl apply` is safe in a pipeline."
+- id: ats066-010-m03-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know what apply controls"
+  source_readings:
+  - sections/section-010/module-03/course-01-imperative-and-declarative-commands.md
+  prompt: "A file sets `replicas: 2` and does not mention `minReadySeconds`. Someone runs `kubectl patch` to set `minReadySeconds: 10`. After the next `kubectl apply` of the file, what is the value of `minReadySeconds`?"
+  options:
+  - id: a
+    text: "0, because apply resets every field to the default."
+    explanation: "Not correct. Apply only changes fields that the file names or previously set."
+  - id: b
+    text: "The apply fails with a conflict."
+    explanation: "Not correct. Client-side apply does not report a conflict for an unmanaged field."
+  - id: c
+    text: "10, because the file does not name the field."
+    explanation: "Correct. A file controls only the fields it names, so a hand change to another field stays until someone removes it."
+  - id: d
+    text: "It is removed and the object is recreated."
+    explanation: "Not correct. Apply does not recreate the object for this reason."
+  correct_option: c
+  explanation: "A file controls only the fields it names, so a hand change to another field stays until someone removes it."
+- id: ats066-010-m03-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Use kubectl diff in a pipeline"
+  source_readings:
+  - sections/section-010/module-03/course-02-desired-state-in-version-control.md
+  prompt: "What exit code does `kubectl diff -f deployment-scout.yaml` return when the file differs from the live object?"
+  options:
+  - id: a
+    text: "0"
+    explanation: "Not correct. Exit code 0 means there is no difference."
+  - id: b
+    text: "2"
+    explanation: "Not correct. Codes above 1 mean the command itself failed."
+  - id: c
+    text: "255"
+    explanation: "Not correct. This is not the code `kubectl diff` uses for a difference."
+  - id: d
+    text: "1"
+    explanation: "Correct. `kubectl diff` exits with 0 when the file and the live object agree and with 1 when they differ, so a pipeline can test it."
+  correct_option: d
+  explanation: "`kubectl diff` exits with 0 when the file and the live object agree and with 1 when they differ, so a pipeline can test it."
+- id: ats066-010-m03-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Explain why files are kept in version control"
+  source_readings:
+  - sections/section-010/module-03/course-02-desired-state-in-version-control.md
+  prompt: "Which benefit does a revert commit give for a configuration repository?"
+  options:
+  - id: a
+    text: "It records an undo as a new change, with an author and a reason."
+    explanation: "Correct. A revert is a new commit that undoes an earlier one, so the history stays complete."
+  - id: b
+    text: "It deletes the earlier commit from the history."
+    explanation: "Not correct. A revert adds a commit and keeps the history."
+  - id: c
+    text: "It changes the live cluster by itself."
+    explanation: "Not correct. A cluster changes only when something applies the repository."
+  - id: d
+    text: "It removes the need for review."
+    explanation: "Not correct. A revert is still a change that can be reviewed."
+  correct_option: a
+  explanation: "A revert is a new commit that undoes an earlier one, so the history stays complete."
+- id: ats066-010-m03-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain why a pull request matters for configuration"
+  source_readings:
+  - sections/section-010/module-03/course-02-desired-state-in-version-control.md
+  prompt: "Why do teams review configuration changes in a pull request before they are applied?"
+  options:
+  - id: a
+    text: "The pull request applies the change to the cluster for the author."
+    explanation: "Not correct. The pull request is a review step and applies nothing."
+  - id: b
+    text: "A second person can read the change and its diff before it reaches the cluster."
+    explanation: "Correct. The review gives other people a chance to catch a mistake while it is still only text."
+  - id: c
+    text: "The cluster refuses changes that did not come from a pull request."
+    explanation: "Not correct. The cluster has no knowledge of pull requests unless a policy is added."
+  - id: d
+    text: "The pull request makes the configuration idempotent."
+    explanation: "Not correct. Idempotence is a property of the apply, not of the review."
+  correct_option: b
+  explanation: "The review gives other people a chance to catch a mistake while it is still only text."
+- id: ats066-010-m03-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read field ownership"
+  source_readings:
+  - sections/section-010/module-03/course-03-server-side-apply-and-field-ownership.md
+  prompt: "Where does the API server record which field manager owns each field of an object?"
+  options:
+  - id: a
+    text: "In `metadata.labels`."
+    explanation: "Not correct. Labels are chosen by users and carry no ownership record."
+  - id: b
+    text: "In `spec.template`."
+    explanation: "Not correct. The pod template describes pods and not ownership."
+  - id: c
+    text: "In `metadata.managedFields`."
+    explanation: "Correct. Server-side apply stores the manager of every field in `managedFields` on the object."
+  - id: d
+    text: "In the `kube-system` namespace."
+    explanation: "Not correct. Ownership is stored on the object itself."
+  correct_option: c
+  explanation: "Server-side apply stores the manager of every field in `managedFields` on the object."
+- id: ats066-010-m03-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Resolve an apply conflict"
+  source_readings:
+  - sections/section-010/module-03/course-03-server-side-apply-and-field-ownership.md
+  prompt: "A second field manager tries to change `spec.replicas`, which the manager `release-pipeline` owns. What does server-side apply do by default?"
+  options:
+  - id: a
+    text: "It overwrites the field and removes the other owner."
+    explanation: "Not correct. Overwriting needs `--force-conflicts`."
+  - id: b
+    text: "It merges the two values."
+    explanation: "Not correct. A single value field cannot be merged."
+  - id: c
+    text: "It ignores the request without a message."
+    explanation: "Not correct. The server reports the conflict."
+  - id: d
+    text: "It returns a conflict and changes nothing."
+    explanation: "Correct. A conflict forces a decision: give up the field or take it with `--force-conflicts`."
+  correct_option: d
+  explanation: "A conflict forces a decision: give up the field or take it with `--force-conflicts`."
+- id: ats066-010-m03-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Share a field between tools"
+  source_readings:
+  - sections/section-010/module-03/course-03-server-side-apply-and-field-ownership.md
+  prompt: "A Deployment is managed by a pipeline and by an autoscaler that sets the replica count. How can the pipeline file avoid fighting the autoscaler?"
+  options:
+  - id: a
+    text: "Leave `spec.replicas` out of the file so the pipeline does not own the field."
+    explanation: "Correct. A field left out of a file is not owned by that file, which lets two managers share one object."
+  - id: b
+    text: "Set `spec.replicas` to 0 in the file."
+    explanation: "Not correct. That would scale the workload to zero."
+  - id: c
+    text: "Use `kubectl create` for every change."
+    explanation: "Not correct. `create` fails on an object that exists."
+  - id: d
+    text: "Delete the autoscaler after each deploy."
+    explanation: "Not correct. This removes the behaviour the team wants."
+  correct_option: a
+  explanation: "A field left out of a file is not owned by that file, which lets two managers share one object."
+- id: ats066-010-m03-q10
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Compare Kustomize and Helm"
+  source_readings:
+  - sections/section-010/module-03/course-04-templating-and-packaging-kustomize-and-helm.md
+  prompt: "Which statement fits Kustomize and not Helm?"
+  options:
+  - id: a
+    text: "It tracks releases and supports `rollback`."
+    explanation: "Not correct. Release tracking and `helm rollback` belong to Helm."
+  - id: b
+    text: "It patches real manifests with overlays and needs no template language."
+    explanation: "Correct. Kustomize works on plain manifests and layers changes on top, while Helm renders templates and records releases."
+  - id: c
+    text: "It fills templates from a values file."
+    explanation: "Not correct. Values and templates are the Helm model."
+  - id: d
+    text: "It needs a cluster to render its output."
+    explanation: "Not correct. Neither tool needs a cluster to render."
+  correct_option: b
+  explanation: "Kustomize works on plain manifests and layers changes on top, while Helm renders templates and records releases."

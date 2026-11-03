@@ -1,0 +1,38 @@
+# Starting state: namespace hold with a ConfigMap and a Deployment that were
+# made with `kubectl create`. No file declares them and no pipeline owns them.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hold
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scout-settings
+  namespace: hold
+data:
+  mode: standard
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scout
+  namespace: hold
+  labels:
+    app: scout
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scout
+  template:
+    metadata:
+      labels:
+        app: scout
+    spec:
+      containers:
+        - name: scout
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898

@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Switch Traffic To A New Version With Blue-Green (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-040-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create namespace launch with scout-blue and a Service that selects version blue
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Create scout-green, switch the Service to green and scale blue to one replica
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until green has two available pods and blue has one
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: green-deployed
+      description: The Deployment scout-green has two available replicas, the label version=green, a readiness probe and the message green release.
+      type: file
+      source: validation/validate-green-deployed.sh
+      hint: Create scout-green with two replicas, the pod label version=green, a readiness probe and the message green release.
+    - name: service-on-green
+      description: The Service scout selects app=scout and version=green.
+      type: file
+      source: validation/validate-service-on-green.sh
+      hint: Patch the Service selector so that version is green. Keep app=scout.
+    - name: endpoints-only-green
+      description: Every ready endpoint of the Service belongs to a green pod, and there are two.
+      type: file
+      source: validation/validate-endpoints-only-green.sh
+      hint: Wait for green to be ready, then check the endpoint slices of the Service. No blue pod may be listed.
+    - name: blue-kept-for-rollback
+      description: The Deployment scout-blue still exists with exactly one available replica.
+      type: file
+      source: validation/validate-blue-kept-for-rollback.sh
+      hint: Scale scout-blue down to one replica. Do not delete it.
+
+teardown:
+  keepCluster: false

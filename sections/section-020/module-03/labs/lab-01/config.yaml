@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Replace A Deployment With An Immutable Selector (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-020-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create namespace yard with the Deployment relay and its Service
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Replace the Deployment and update the Service selector
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until two relay pods are ready with the new label
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: selector-replaced
+      description: The Deployment relay uses only the selector app.kubernetes.io/name=relay.
+      type: file
+      source: validation/validate-selector-replaced.sh
+      hint: The selector cannot be patched. Delete the Deployment and apply a new one, or use kubectl replace --force.
+    - name: relay-available
+      description: Two relay pods run with the new label and no pod with the old label is left.
+      type: file
+      source: validation/validate-relay-available.sh
+      hint: Put the new label on the pod template and keep two replicas. Wait for the rollout.
+    - name: service-follows
+      description: The Service relay selects the new label and has two ready endpoints.
+      type: file
+      source: validation/validate-service-follows.sh
+      hint: Edit the Service selector to the same label as the Deployment. The Service does not change by itself.
+    - name: owner-label-kept
+      description: The Deployment still carries the label owner=platform.
+      type: file
+      source: validation/validate-owner-label-kept.sh
+      hint: Copy the metadata labels from the old Deployment into the new file before you delete it.
+
+teardown:
+  keepCluster: false

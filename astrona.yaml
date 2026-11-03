@@ -121,6 +121,49 @@ modules:
     - name: Declarative management with Kustomize
       url: https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/
   - type: reading
+    title: Declarative Configuration, Idempotence And Field Ownership
+    path: sections/section-010/module-03/course.md
+  - type: reading
+    title: Imperative And Declarative Commands
+    path: sections/section-010/module-03/course-01-imperative-and-declarative-commands.md
+  - type: reading
+    title: Desired State In Version Control
+    path: sections/section-010/module-03/course-02-desired-state-in-version-control.md
+  - type: reading
+    title: Server-Side Apply And Field Ownership
+    path: sections/section-010/module-03/course-03-server-side-apply-and-field-ownership.md
+  - type: reading
+    title: 'Templating And Packaging: Kustomize And Helm'
+    path: sections/section-010/module-03/course-04-templating-and-packaging-kustomize-and-helm.md
+  - type: reading
+    title: Summary
+    path: sections/section-010/module-03/course-05-summary.md
+  - type: reading
+    title: Take Over Scout With Server-Side Apply - Task
+    path: sections/section-010/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Take Over Scout With Server-Side Apply
+    path: sections/section-010/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 30m
+    topic: configuration-as-code
+    task_kind: build
+    learning_goals:
+    - "Take over objects made with kubectl create using server-side apply"
+    - "Read field ownership in managedFields"
+    tags:
+    - cgoa
+    - configuration-as-code
+    - server-side-apply
+    - kubectl
+    resources:
+    - name: Server-Side Apply
+      url: https://kubernetes.io/docs/reference/using-api/server-side-apply/
+  - type: quiz
+    title: 'Knowledge Check: Declarative Configuration, Idempotence And Field Ownership'
+    path: sections/section-010/module-03/quiz.yaml
+    pass_score: 70
+  - type: reading
     title: Deliver A Configuration Change Safely - Task
     path: sections/section-010/capstone/labs/lab-01/question.md
   - type: lab
@@ -233,6 +276,50 @@ modules:
       url: https://opentofu.org/docs/language/import/
     - name: State
       url: https://opentofu.org/docs/language/state/
+  - type: reading
+    title: Infrastructure As Code Concepts, Immutability And Safe Change
+    path: sections/section-020/module-03/course.md
+  - type: reading
+    title: Declarative And Imperative Infrastructure Code
+    path: sections/section-020/module-03/course-01-declarative-and-imperative-infrastructure-code.md
+  - type: reading
+    title: Mutable And Immutable Infrastructure
+    path: sections/section-020/module-03/course-02-mutable-and-immutable-infrastructure.md
+  - type: reading
+    title: Kubernetes As An Infrastructure Control Plane
+    path: sections/section-020/module-03/course-03-kubernetes-as-an-infrastructure-control-plane.md
+  - type: reading
+    title: Reviewing, Testing And Securing Infrastructure Changes
+    path: sections/section-020/module-03/course-04-reviewing-testing-and-securing-infrastructure-changes.md
+  - type: reading
+    title: Summary
+    path: sections/section-020/module-03/course-05-summary.md
+  - type: reading
+    title: Replace A Deployment With An Immutable Selector - Task
+    path: sections/section-020/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Replace A Deployment With An Immutable Selector
+    path: sections/section-020/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 30m
+    topic: infrastructure-as-code
+    task_kind: build
+    learning_goals:
+    - "Explain why an immutable field forces a replacement"
+    - "Replace a workload without losing its service"
+    tags:
+    - cgoa
+    - infrastructure-as-code
+    - immutable
+    - deployment
+    - kubectl
+    resources:
+    - name: Deployments
+      url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+  - type: quiz
+    title: 'Knowledge Check: Infrastructure As Code Concepts, Immutability And Safe Change'
+    path: sections/section-020/module-03/quiz.yaml
+    pass_score: 70
   - type: reading
     title: Bring A Hand-Made Depot Under OpenTofu - Task
     path: sections/section-020/capstone/labs/lab-01/question.md
@@ -347,6 +434,94 @@ modules:
     - name: Configure a security context
       url: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   - type: reading
+    title: DevOps Principles, Feedback And Measurement
+    path: sections/section-030/module-03/course.md
+  - type: reading
+    title: DevOps Goals And Working Agreements
+    path: sections/section-030/module-03/course-01-devops-goals-and-working-agreements.md
+  - type: reading
+    title: Feedback Loops And Signals
+    path: sections/section-030/module-03/course-02-feedback-loops-and-signals.md
+  - type: reading
+    title: Measuring Delivery With Four Key Metrics
+    path: sections/section-030/module-03/course-03-measuring-delivery-with-four-key-metrics.md
+  - type: reading
+    title: Blameless Reviews, Ownership And Runbooks
+    path: sections/section-030/module-03/course-04-blameless-reviews-ownership-and-runbooks.md
+  - type: reading
+    title: Summary
+    path: sections/section-030/module-03/course-05-summary.md
+  - type: reading
+    title: Make Ownership And Change Reasons Visible - Task
+    path: sections/section-030/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Make Ownership And Change Reasons Visible
+    path: sections/section-030/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 30m
+    topic: devops
+    task_kind: build
+    learning_goals:
+    - "Label workloads with an owner and annotate a runbook"
+    - "Record the reason for a rollout"
+    tags:
+    - cgoa
+    - devops
+    - ownership
+    - labels
+    - annotations
+    resources:
+    - name: Recommended Labels
+      url: https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
+  - type: quiz
+    title: 'Knowledge Check: DevOps Principles, Feedback And Measurement'
+    path: sections/section-030/module-03/quiz.yaml
+    pass_score: 70
+  - type: reading
+    title: Software Supply Chain Security And Admission Policy
+    path: sections/section-030/module-04/course.md
+  - type: reading
+    title: The Software Supply Chain And Its Attack Points
+    path: sections/section-030/module-04/course-01-the-software-supply-chain-and-its-attack-points.md
+  - type: reading
+    title: 'Image References: Tags, Digests And Pull Policy'
+    path: sections/section-030/module-04/course-02-image-references-tags-digests-and-pull-policy.md
+  - type: reading
+    title: Admission Policy With ValidatingAdmissionPolicy
+    path: sections/section-030/module-04/course-03-admission-policy-with-validatingadmissionpolicy.md
+  - type: reading
+    title: Policy As Code And Pipeline Checks
+    path: sections/section-030/module-04/course-04-policy-as-code-and-pipeline-checks.md
+  - type: reading
+    title: Summary
+    path: sections/section-030/module-04/course-05-summary.md
+  - type: reading
+    title: Reject Mutable Image Tags With An Admission Policy - Task
+    path: sections/section-030/module-04/labs/lab-01/question.md
+  - type: lab
+    title: Reject Mutable Image Tags With An Admission Policy
+    path: sections/section-030/module-04/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 40m
+    topic: devsecops
+    task_kind: build
+    learning_goals:
+    - "Write a ValidatingAdmissionPolicy and binding"
+    - "Test a policy with a server-side dry run"
+    tags:
+    - cgoa
+    - devsecops
+    - supply-chain
+    - admission
+    - cel
+    resources:
+    - name: Validating Admission Policy
+      url: https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
+  - type: quiz
+    title: 'Knowledge Check: Software Supply Chain Security And Admission Policy'
+    path: sections/section-030/module-04/quiz.yaml
+    pass_score: 70
+  - type: reading
     title: Bring A Bay To A Safe Supported State - Task
     path: sections/section-030/capstone/labs/lab-01/question.md
   - type: lab
@@ -458,6 +633,50 @@ modules:
     resources:
     - name: Rolling back a Deployment
       url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment
+  - type: reading
+    title: CI/CD Concepts, Pipelines And Deployment Strategies
+    path: sections/section-040/module-03/course.md
+  - type: reading
+    title: Continuous Integration, Delivery And Deployment
+    path: sections/section-040/module-03/course-01-continuous-integration-delivery-and-deployment.md
+  - type: reading
+    title: Pipelines As Code
+    path: sections/section-040/module-03/course-02-pipelines-as-code.md
+  - type: reading
+    title: Deployment Strategies
+    path: sections/section-040/module-03/course-03-deployment-strategies.md
+  - type: reading
+    title: CI/CD And GitOps Together
+    path: sections/section-040/module-03/course-04-ci-cd-and-gitops-together.md
+  - type: reading
+    title: Summary
+    path: sections/section-040/module-03/course-05-summary.md
+  - type: reading
+    title: Switch Traffic To A New Version With Blue-Green - Task
+    path: sections/section-040/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Switch Traffic To A New Version With Blue-Green
+    path: sections/section-040/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 30m
+    topic: ci-cd
+    task_kind: build
+    learning_goals:
+    - "Deploy a second version beside the first"
+    - "Switch a Service selector and keep the old version for rollback"
+    tags:
+    - cgoa
+    - ci-cd
+    - blue-green
+    - service
+    - kubectl
+    resources:
+    - name: Services
+      url: https://kubernetes.io/docs/concepts/services-networking/service/
+  - type: quiz
+    title: 'Knowledge Check: CI/CD Concepts, Pipelines And Deployment Strategies'
+    path: sections/section-040/module-03/quiz.yaml
+    pass_score: 70
   - type: reading
     title: Recover Production And Promote A Release With Evidence - Task
     path: sections/section-040/capstone/labs/lab-01/question.md

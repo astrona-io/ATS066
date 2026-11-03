@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Make Ownership And Change History Queryable (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-030-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create namespace ops with the Deployments scout and probe and no ownership data
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the labels, annotations and the recorded change
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until all pods of both Deployments are ready
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: owner-labels
+      description: Both Deployments carry the part-of label and the right owner label.
+      type: file
+      source: validation/validate-owner-labels.sh
+      hint: Use kubectl label with app.kubernetes.io/part-of=starfleet and owner=<team>. Scout belongs to scout-team and probe to probe-team.
+    - name: runbook-annotations
+      description: Both Deployments name their runbook in an annotation.
+      type: file
+      source: validation/validate-runbook-annotations.sh
+      hint: Use kubectl annotate with runbook=runbooks/<name>.md.
+    - name: change-recorded
+      description: Scout has at least two revisions and the newest revision records a change cause.
+      type: file
+      source: validation/validate-change-recorded.sh
+      hint: Change the pod template, for example an environment variable, and set kubernetes.io/change-cause in the same change.
+    - name: workloads-available
+      description: Scout has two available replicas and probe has one.
+      type: file
+      source: validation/validate-workloads-available.sh
+      hint: Wait for the rollout of scout to finish. Keep two replicas for scout and one for probe.
+
+teardown:
+  keepCluster: false

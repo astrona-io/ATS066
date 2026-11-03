@@ -1,0 +1,236 @@
+# Knowledge check for module section-030/module-04. Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats066-030-m04
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "DevOps and DevSecOps"
+placement:
+  position: after
+  reading: sections/section-030/module-04/course-05-summary.md
+questions:
+- id: ats066-030-m04-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the supply chain links"
+  source_readings:
+  - sections/section-030/module-04/course-01-the-software-supply-chain-and-its-attack-points.md
+  prompt: "Which order shows the links of a software supply chain?"
+  options:
+  - id: a
+    text: "Source code, dependencies, build, image, registry, deployment."
+    explanation: "Correct. Each link can be attacked, so each needs its own evidence."
+  - id: b
+    text: "Deployment, registry, image, build, source code."
+    explanation: "Not correct. This reverses the direction."
+  - id: c
+    text: "Registry, source code, deployment, build, image."
+    explanation: "Not correct. Source comes first."
+  - id: d
+    text: "Image, source code, build, registry, deployment."
+    explanation: "Not correct. An image cannot exist before the build."
+  correct_option: a
+  explanation: "Each link can be attacked, so each needs its own evidence."
+- id: ats066-030-m04-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Separate the kinds of evidence"
+  source_readings:
+  - sections/section-030/module-04/course-01-the-software-supply-chain-and-its-attack-points.md
+  prompt: "Which evidence lists the components inside an artifact?"
+  options:
+  - id: a
+    text: "A vulnerability scan."
+    explanation: "Not correct. A scan lists known problems at one moment."
+  - id: b
+    text: "A software bill of materials."
+    explanation: "Correct. SBOM, scan, provenance and signature answer different questions, and none replaces another."
+  - id: c
+    text: "A signature."
+    explanation: "Not correct. A signature proves who published the artifact."
+  - id: d
+    text: "Provenance."
+    explanation: "Not correct. Provenance records how the artifact was built."
+  correct_option: b
+  explanation: "SBOM, scan, provenance and signature answer different questions, and none replaces another."
+- id: ats066-030-m04-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know what a scan result belongs to"
+  source_readings:
+  - sections/section-030/module-04/course-01-the-software-supply-chain-and-its-attack-points.md
+  prompt: "Why does a scan result age?"
+  options:
+  - id: a
+    text: "The image changes by itself over time."
+    explanation: "Not correct. A digest names fixed content."
+  - id: b
+    text: "The registry deletes old scan results."
+    explanation: "Not correct. The result stays but becomes outdated."
+  - id: c
+    text: "New vulnerabilities are published after the scan, while the image digest stays the same."
+    explanation: "Correct. A scan result belongs to one image digest and is a statement about one moment."
+  - id: d
+    text: "Scans only work on the day of the build."
+    explanation: "Not correct. Scans can be repeated at any time."
+  correct_option: c
+  explanation: "A scan result belongs to one image digest and is a statement about one moment."
+- id: ats066-030-m04-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Read an image reference"
+  source_readings:
+  - sections/section-030/module-04/course-02-image-references-tags-digests-and-pull-policy.md
+  prompt: "What does an image reference without a tag, such as `ghcr.io/stefanprodan/podinfo`, mean?"
+  options:
+  - id: a
+    text: "The oldest published version."
+    explanation: "Not correct. No such rule exists."
+  - id: b
+    text: "The version with the highest number."
+    explanation: "Not correct. `latest` is only a tag name."
+  - id: c
+    text: "An error from the container runtime."
+    explanation: "Not correct. A missing tag is accepted as `latest`."
+  - id: d
+    text: "The tag `latest`."
+    explanation: "Correct. A missing tag defaults to `latest`, which is a mutable tag."
+  correct_option: d
+  explanation: "A missing tag defaults to `latest`, which is a mutable tag."
+- id: ats066-030-m04-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain why digests are repeatable"
+  source_readings:
+  - sections/section-030/module-04/course-02-image-references-tags-digests-and-pull-policy.md
+  prompt: "Why does pinning an image by digest make a deployment repeatable?"
+  options:
+  - id: a
+    text: "A digest is the hash of the image, so it names exactly one content."
+    explanation: "Correct. A tag can move to other content, but a digest cannot."
+  - id: b
+    text: "A digest is a version number that only increases."
+    explanation: "Not correct. A digest is a hash, not a counter."
+  - id: c
+    text: "The registry refuses to change images that have a digest."
+    explanation: "Not correct. The digest is a property of the content."
+  - id: d
+    text: "A digest makes the image smaller."
+    explanation: "Not correct. Size is not affected."
+  correct_option: a
+  explanation: "A tag can move to other content, but a digest cannot."
+- id: ats066-030-m04-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know the default pull policy"
+  source_readings:
+  - sections/section-030/module-04/course-02-image-references-tags-digests-and-pull-policy.md
+  prompt: "What is the default `imagePullPolicy` for an image with the fixed tag `6.15.0`?"
+  options:
+  - id: a
+    text: "`Always`"
+    explanation: "Not correct. `Always` is the default only for `latest` or no tag."
+  - id: b
+    text: "`IfNotPresent`"
+    explanation: "Correct. With `IfNotPresent`, two nodes can hold different content under the same tag."
+  - id: c
+    text: "`Never`"
+    explanation: "Not correct. `Never` must be set explicitly."
+  - id: d
+    text: "`OnFailure`"
+    explanation: "Not correct. This is not a pull policy."
+  correct_option: b
+  explanation: "With `IfNotPresent`, two nodes can hold different content under the same tag."
+- id: ats066-030-m04-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know what a policy needs to take effect"
+  source_readings:
+  - sections/section-030/module-04/course-03-admission-policy-with-validatingadmissionpolicy.md
+  prompt: "You create a ValidatingAdmissionPolicy and no binding. What is enforced?"
+  options:
+  - id: a
+    text: "Every namespace is checked with the action `Deny`."
+    explanation: "Not correct. A binding decides actions and scope."
+  - id: b
+    text: "Only new namespaces are checked."
+    explanation: "Not correct. Without a binding nothing selects namespaces."
+  - id: c
+    text: "Nothing, because a policy only takes effect through a binding."
+    explanation: "Correct. The policy holds the rule and the binding turns it on."
+  - id: d
+    text: "Only `kube-system` is checked."
+    explanation: "Not correct. No namespace is selected by default."
+  correct_option: c
+  explanation: "The policy holds the rule and the binding turns it on."
+- id: ats066-030-m04-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick a binding action"
+  source_readings:
+  - sections/section-030/module-04/course-03-admission-policy-with-validatingadmissionpolicy.md
+  prompt: "Which binding action lets a request through and returns a warning to the user?"
+  options:
+  - id: a
+    text: "`Deny`"
+    explanation: "Not correct. `Deny` rejects the request."
+  - id: b
+    text: "`Audit`"
+    explanation: "Not correct. `Audit` writes an audit annotation and does not warn the user."
+  - id: c
+    text: "`Allow`"
+    explanation: "Not correct. This is not a validation action."
+  - id: d
+    text: "`Warn`"
+    explanation: "Correct. `Deny`, `Warn` and `Audit` can be combined in one binding."
+  correct_option: d
+  explanation: "`Deny`, `Warn` and `Audit` can be combined in one binding."
+- id: ats066-030-m04-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Test a policy safely"
+  source_readings:
+  - sections/section-030/module-04/course-03-admission-policy-with-validatingadmissionpolicy.md
+  prompt: "Which command tests whether admission would reject a Deployment, without storing it?"
+  options:
+  - id: a
+    text: "`kubectl apply --dry-run=server -f deployment-scout.yaml`"
+    explanation: "Correct. A server-side dry run sends the request through admission and returns the result without storing the object."
+  - id: b
+    text: "`kubectl apply --dry-run=client -f deployment-scout.yaml`"
+    explanation: "Not correct. A client dry run never contacts admission."
+  - id: c
+    text: "`kubectl get deployment scout`"
+    explanation: "Not correct. This only reads."
+  - id: d
+    text: "`kubectl diff --server-side`"
+    explanation: "Not correct. This option is not a test of admission."
+  correct_option: a
+  explanation: "A server-side dry run sends the request through admission and returns the result without storing the object."
+- id: ats066-030-m04-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Place checks in the right stages"
+  source_readings:
+  - sections/section-030/module-04/course-04-policy-as-code-and-pipeline-checks.md
+  prompt: "Which statement about policy as code is correct?"
+  options:
+  - id: a
+    text: "Pipeline checks are enough, so the cluster needs none."
+    explanation: "Not correct. Anything that skips the pipeline would also skip the rules."
+  - id: b
+    text: "The cluster check is the guarantee, and earlier checks give fast feedback."
+    explanation: "Correct. The same rule runs at several stages, and admission is the one that cannot be bypassed."
+  - id: c
+    text: "Admission is slower, so it should replace all other checks."
+    explanation: "Not correct. Early checks are valuable for fast feedback."
+  - id: d
+    text: "A policy never needs an exception path."
+    explanation: "Not correct. Without one, teams route around the rules."
+  correct_option: b
+  explanation: "The same rule runs at several stages, and admission is the one that cannot be bypassed."

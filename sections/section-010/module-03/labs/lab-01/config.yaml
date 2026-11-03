@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Take Over Imperative Objects With Server-Side Apply (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-010-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create namespace hold with a ConfigMap and a Deployment made with kubectl create
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the declared files with server-side apply as release-pipeline
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until two scout pods are ready
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: deployment-owned-by-pipeline
+      description: The Deployment scout has fields that the field manager release-pipeline set with an apply operation.
+      type: file
+      source: validation/validate-deployment-owned-by-pipeline.sh
+      hint: Apply the file with kubectl apply --server-side --field-manager=release-pipeline. Add --force-conflicts to take over the replica count.
+    - name: settings-owned-by-pipeline
+      description: The ConfigMap scout-settings holds mode careful and release-pipeline owns the field.
+      type: file
+      source: validation/validate-settings-owned-by-pipeline.sh
+      hint: Change mode to careful in the file and apply it with the same field manager. The old value belongs to another manager, so the apply needs --force-conflicts.
+    - name: scout-scaled-and-available
+      description: Deployment scout has two replicas and both are available.
+      type: file
+      source: validation/validate-scout-scaled-and-available.sh
+      hint: 'Set replicas: 2 in the file and wait for the rollout to finish.'
+    - name: mode-from-configmap
+      description: The container reads MODE from the ConfigMap scout-settings, key mode, and no literal value is set.
+      type: file
+      source: validation/validate-mode-from-configmap.sh
+      hint: Add an env entry MODE with valueFrom.configMapKeyRef, name scout-settings and key mode.
+
+teardown:
+  keepCluster: false

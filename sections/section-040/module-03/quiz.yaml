@@ -1,0 +1,236 @@
+# Knowledge check for module section-040/module-03. Keep question ids stable once published.
+schema_version: 1
+kind: question_bank
+id: ats066-040-m03
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-040
+  title: "CI/CD"
+placement:
+  position: after
+  reading: sections/section-040/module-03/course-05-summary.md
+questions:
+- id: ats066-040-m03-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Define continuous integration"
+  source_readings:
+  - sections/section-040/module-03/course-01-continuous-integration-delivery-and-deployment.md
+  prompt: "What defines continuous integration?"
+  options:
+  - id: a
+    text: "Merging changes into a shared branch often, with an automated build and test on each change."
+    explanation: "Correct. Frequent integration finds conflicts and defects while the change is small."
+  - id: b
+    text: "Deploying every change to production automatically."
+    explanation: "Not correct. That is continuous deployment."
+  - id: c
+    text: "Releasing once a quarter after a long test phase."
+    explanation: "Not correct. That is the opposite of frequent integration."
+  - id: d
+    text: "Running a build only on a nightly schedule."
+    explanation: "Not correct. Integration is tested on each change."
+  correct_option: a
+  explanation: "Frequent integration finds conflicts and defects while the change is small."
+- id: ats066-040-m03-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Tell delivery from deployment"
+  source_readings:
+  - sections/section-040/module-03/course-01-continuous-integration-delivery-and-deployment.md
+  prompt: "What separates continuous delivery from continuous deployment?"
+  options:
+  - id: a
+    text: "Delivery has no automated tests."
+    explanation: "Not correct. Both depend on automated tests."
+  - id: b
+    text: "Delivery has a manual decision before production and deployment has none."
+    explanation: "Correct. In delivery a person presses the button. In deployment every passing change is released."
+  - id: c
+    text: "Deployment never uses a pipeline."
+    explanation: "Not correct. Both use a pipeline."
+  - id: d
+    text: "Delivery builds a new artifact for each environment."
+    explanation: "Not correct. Both build once and promote."
+  correct_option: b
+  explanation: "In delivery a person presses the button. In deployment every passing change is released."
+- id: ats066-040-m03-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know why an artifact is built once"
+  source_readings:
+  - sections/section-040/module-03/course-01-continuous-integration-delivery-and-deployment.md
+  prompt: "Why does a pipeline build the artifact once and promote it?"
+  options:
+  - id: a
+    text: "Building is too expensive to run twice."
+    explanation: "Not correct. The reason is correctness, not cost."
+  - id: b
+    text: "Registries accept only one push."
+    explanation: "Not correct. Registries accept many pushes."
+  - id: c
+    text: "The thing that was tested is the thing that is released."
+    explanation: "Correct. A rebuilt artifact is a different artifact, even from the same commit."
+  - id: d
+    text: "Environments cannot run different images."
+    explanation: "Not correct. They can, which is exactly the risk."
+  correct_option: c
+  explanation: "A rebuilt artifact is a different artifact, even from the same commit."
+- id: ats066-040-m03-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read the exit code of a step"
+  source_readings:
+  - sections/section-040/module-03/course-02-pipelines-as-code.md
+  prompt: "A pipeline step is a container whose main process exits with code 1. What does the pipeline do?"
+  options:
+  - id: a
+    text: "It marks the step as successful because a process ran."
+    explanation: "Not correct. Only exit code 0 means success."
+  - id: b
+    text: "It retries forever until the code is 0."
+    explanation: "Not correct. Retries must be configured."
+  - id: c
+    text: "It skips the failure and continues."
+    explanation: "Not correct. A failure stops the line unless configured otherwise."
+  - id: d
+    text: "It marks the step as failed and stops the later jobs that depend on it."
+    explanation: "Correct. Exit code 0 means success and any other code means failure."
+  correct_option: d
+  explanation: "Exit code 0 means success and any other code means failure."
+- id: ats066-040-m03-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Stop a Job from retrying"
+  source_readings:
+  - sections/section-040/module-03/course-02-pipelines-as-code.md
+  prompt: "Which Job field makes Kubernetes stop retrying a failed pod at once?"
+  options:
+  - id: a
+    text: "`backoffLimit: 0`"
+    explanation: "Correct. A Job retries by default until `backoffLimit` is reached."
+  - id: b
+    text: "`restartPolicy: Always`"
+    explanation: "Not correct. A Job does not allow this value."
+  - id: c
+    text: "`replicas: 0`"
+    explanation: "Not correct. A Job has no replicas field."
+  - id: d
+    text: "`suspend: false`"
+    explanation: "Not correct. This controls whether the Job runs, not retries."
+  correct_option: a
+  explanation: "A Job retries by default until `backoffLimit` is reached."
+- id: ats066-040-m03-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Protect secrets in pipeline files"
+  source_readings:
+  - sections/section-040/module-03/course-02-pipelines-as-code.md
+  prompt: "Which practice protects secrets in a pipeline?"
+  options:
+  - id: a
+    text: "Echo the secret in the log to check it."
+    explanation: "Not correct. A logged secret is exposed."
+  - id: b
+    text: "Do not give secrets to pull requests from untrusted forks."
+    explanation: "Correct. A pipeline definition and its secrets are a target, so untrusted changes run without secrets."
+  - id: c
+    text: "Reference actions by the tag `latest`."
+    explanation: "Not correct. A moving tag can change what the pipeline runs."
+  - id: d
+    text: "Give every job write access to production."
+    explanation: "Not correct. Each job should have only the permissions it needs."
+  correct_option: b
+  explanation: "A pipeline definition and its secrets are a target, so untrusted changes run without secrets."
+- id: ats066-040-m03-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Describe a rolling update"
+  source_readings:
+  - sections/section-040/module-03/course-03-deployment-strategies.md
+  prompt: "What does a rolling update do?"
+  options:
+  - id: a
+    text: "Stops all old pods before it starts new ones."
+    explanation: "Not correct. That is the recreate strategy."
+  - id: b
+    text: "Runs two full copies and switches traffic once."
+    explanation: "Not correct. That is blue-green."
+  - id: c
+    text: "Replaces pods of the old version a few at a time."
+    explanation: "Correct. A Deployment uses a rolling update by default, controlled by `maxSurge` and `maxUnavailable`."
+  - id: d
+    text: "Sends a small share of traffic to the new version only."
+    explanation: "Not correct. That is a canary."
+  correct_option: c
+  explanation: "A Deployment uses a rolling update by default, controlled by `maxSurge` and `maxUnavailable`."
+- id: ats066-040-m03-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Perform a blue-green switch"
+  source_readings:
+  - sections/section-040/module-03/course-03-deployment-strategies.md
+  prompt: "How does the module switch traffic from blue to green?"
+  options:
+  - id: a
+    text: "It deletes the blue pods."
+    explanation: "Not correct. Deleting is not needed for the switch."
+  - id: b
+    text: "It renames the green Deployment to blue."
+    explanation: "Not correct. A Deployment cannot be renamed."
+  - id: c
+    text: "It restarts the API server."
+    explanation: "Not correct. The API server is not involved."
+  - id: d
+    text: "It changes the Service selector from `version: blue` to `version: green`."
+    explanation: "Correct. The selector change moves all traffic at once and the old pods remain for a fast rollback."
+  correct_option: d
+  explanation: "The selector change moves all traffic at once and the old pods remain for a fast rollback."
+- id: ats066-040-m03-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Compare strategies"
+  source_readings:
+  - sections/section-040/module-03/course-03-deployment-strategies.md
+  prompt: "Which strategy needs double capacity during a release but allows an almost instant rollback?"
+  options:
+  - id: a
+    text: "Blue-green"
+    explanation: "Correct. Blue-green keeps the old environment running, so rollback is a switch back."
+  - id: b
+    text: "Recreate"
+    explanation: "Not correct. Recreate needs no extra capacity and causes downtime."
+  - id: c
+    text: "Rolling update"
+    explanation: "Not correct. A rolling update needs little extra capacity."
+  - id: d
+    text: "Big bang with no old version"
+    explanation: "Not correct. It has no rollback target."
+  correct_option: a
+  explanation: "Blue-green keeps the old environment running, so rollback is a switch back."
+- id: ats066-040-m03-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Explain why GitOps separates build from deployment"
+  source_readings:
+  - sections/section-040/module-03/course-04-ci-cd-and-gitops-together.md
+  prompt: "Why does pull delivery with a GitOps agent reduce risk compared with a pipeline that runs `kubectl apply`?"
+  options:
+  - id: a
+    text: "The agent skips all reviews."
+    explanation: "Not correct. Reviews happen on the repository changes."
+  - id: b
+    text: "The pipeline needs no cluster credentials, and the agent corrects drift."
+    explanation: "Correct. Credentials stay inside the cluster, and the state of production is a commit that can be reverted."
+  - id: c
+    text: "The pipeline gets cluster-admin rights to deploy faster."
+    explanation: "Not correct. That is the weakness of push delivery."
+  - id: d
+    text: "The cluster stops needing a Git repository."
+    explanation: "Not correct. The repository holds the desired state."
+  correct_option: b
+  explanation: "Credentials stay inside the cluster, and the state of production is a commit that can be reverted."
