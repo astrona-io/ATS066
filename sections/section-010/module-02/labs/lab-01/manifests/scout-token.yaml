@@ -1,0 +1,10 @@
+# The Secret that exists in the cluster and must never be written into the
+# learner's files. The Deployment refers to it by name and key only.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: scout-token
+  namespace: starfleet
+type: Opaque
+stringData:
+  token: star-12345

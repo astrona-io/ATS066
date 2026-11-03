@@ -1,0 +1,386 @@
+# Final domain knowledge check across all four sections (four questions each).
+schema_version: 1
+kind: question_bank
+id: ats066-final
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: domain
+  id: related-practices
+  title: Related Practices
+questions:
+- id: ats066-final-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the changes that create a revision
+  source_readings:
+  - sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+  prompt: Which change to a Deployment creates a new revision?
+  options:
+  - id: a
+    text: A new container image in the pod template.
+    explanation: Correct. The pod template changed.
+  - id: b
+    text: A change of `spec.replicas`.
+    explanation: Not correct. A scale change does not touch the template.
+  - id: c
+    text: A new label on the Deployment object.
+    explanation: Not correct. A label on the object is outside the template.
+  - id: d
+    text: A `kubectl get` of the Deployment.
+    explanation: Not correct. A read does not change anything.
+  correct_option: a
+  explanation: A revision follows a change of `.spec.template`.
+- id: ats066-final-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Calculate surge
+  source_readings:
+  - sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+  prompt: 'A Deployment has 4 replicas, `maxSurge: 25%` and `maxUnavailable: 25%`.
+    What are the limits?'
+  options:
+  - id: a
+    text: Zero extra pods and zero unavailable pods.
+    explanation: Not correct. Both limits are 1 here.
+  - id: b
+    text: One extra pod and one unavailable pod.
+    explanation: Correct. 25 percent of 4 is 1, and surge rounds up while unavailable
+      rounds down.
+  - id: c
+    text: Two extra pods and two unavailable pods.
+    explanation: Not correct. 25 percent of 4 is one pod.
+  - id: d
+    text: Four extra pods and no unavailable pods.
+    explanation: Not correct. That would be 100 percent.
+  correct_option: b
+  explanation: With 4 replicas, 25 percent is exactly 1.
+- id: ats066-final-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain a stalled rollout
+  source_readings:
+  - sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+  prompt: A new pod never becomes ready. What does the Deployment do after the progress
+    deadline?
+  options:
+  - id: a
+    text: It rolls back automatically.
+    explanation: Not correct. Kubernetes reports the failure and does not undo it.
+  - id: b
+    text: It deletes the old pods.
+    explanation: Not correct. The old pods keep serving.
+  - id: c
+    text: It reports the rollout as not progressing and keeps the old pods.
+    explanation: Correct. It does not undo the change by itself.
+  - id: d
+    text: It scales to zero.
+    explanation: Not correct. It does not.
+  correct_option: c
+  explanation: The deadline sets a condition on the Deployment. A person or a pipeline
+    decides to roll back.
+- id: ats066-final-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Pick the right way to change configuration safely
+  source_readings:
+  - sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+  prompt: Which approach makes a configuration change reach the pods in a reviewable
+    way?
+  options:
+  - id: a
+    text: Edit the ConfigMap in place and expect environment variables to change.
+    explanation: Not correct. Running containers do not see a changed environment
+      variable.
+  - id: b
+    text: Mount the key with `subPath` and wait.
+    explanation: Not correct. A subPath mount never updates.
+  - id: c
+    text: Restart the nodes.
+    explanation: Not correct. This is not a configuration method.
+  - id: d
+    text: A generated ConfigMap whose name changes with its content, so the template
+      changes.
+    explanation: Correct. The new name changes the template and starts a rollout.
+  correct_option: d
+  explanation: A name that follows the content turns a configuration change into a
+    rollout.
+- id: ats066-final-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the first OpenTofu steps
+  source_readings:
+  - sections/section-020/module-01/course-01-declaring-resources-with-opentofu.md
+  prompt: What does `tofu init` do?
+  options:
+  - id: a
+    text: It downloads the providers that the files need.
+    explanation: Correct. It prepares the working directory.
+  - id: b
+    text: It creates the objects in the cluster.
+    explanation: Not correct. Apply does this.
+  - id: c
+    text: It shows the plan.
+    explanation: Not correct. Plan does this.
+  - id: d
+    text: It deletes the state.
+    explanation: Not correct. Init never deletes the state.
+  correct_option: a
+  explanation: Init installs providers and sets up the backend.
+- id: ats066-final-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use a saved plan
+  source_readings:
+  - sections/section-020/module-01/course-02-reading-plans-replacement-and-lifecycle-rules.md
+  prompt: Why save a plan with `tofu plan -out=tfplan` and apply that file?
+  options:
+  - id: a
+    text: It makes the apply faster.
+    explanation: Not correct. Speed is not the reason.
+  - id: b
+    text: The apply runs exactly the plan that was reviewed.
+    explanation: Correct. A new plan could differ if something changed in between.
+  - id: c
+    text: It hides the changes from the log.
+    explanation: Not correct. It does not.
+  - id: d
+    text: It avoids the need for state.
+    explanation: Not correct. State is still used.
+  correct_option: b
+  explanation: A saved plan fixes what was reviewed.
+- id: ats066-final-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find drift
+  source_readings:
+  - sections/section-020/module-02/course-01-state-drift-and-detection.md
+  prompt: Someone scales a managed Deployment with `kubectl`. What does a normal `tofu
+    plan` show?
+  options:
+  - id: a
+    text: No change, because OpenTofu never reads the cluster.
+    explanation: Not correct. A plan refreshes the state from the cluster.
+  - id: b
+    text: A replacement of the Deployment.
+    explanation: Not correct. The replica count is changed in place.
+  - id: c
+    text: An update in place that returns the replicas to the declared value.
+    explanation: Correct. The plan refreshes the state and compares with the files.
+  - id: d
+    text: An error, because the object is unmanaged.
+    explanation: Not correct. The object is managed.
+  correct_option: c
+  explanation: A plan reports drift and proposes to undo it.
+- id: ats066-final-q08
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Prove an import
+  source_readings:
+  - sections/section-020/module-02/course-02-importing-resources-and-the-gitops-boundary.md
+  prompt: How can you show that an import kept the object instead of deleting and
+    creating it?
+  options:
+  - id: a
+    text: The name is the same.
+    explanation: Not correct. A recreated object has the same name.
+  - id: b
+    text: The plan printed a green line.
+    explanation: Not correct. The plan output does not prove it.
+  - id: c
+    text: The label `managed-by` exists.
+    explanation: Not correct. A label can be added to any object.
+  - id: d
+    text: The unique identifier is the same as before.
+    explanation: Correct. A destroy and create gives a new UID.
+  correct_option: d
+  explanation: Compare the UID, which is assigned when the object is created.
+- id: ats066-final-q09
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define platform enablement
+  source_readings:
+  - sections/section-030/module-01/course-01-ownership-boundaries-with-namespaces-and-rbac.md
+  prompt: What does a platform team offer in the DevOps model of shared ownership?
+  options:
+  - id: a
+    text: Supported shared capabilities, such as namespaces, access rules and limits.
+    explanation: Correct. Application teams use them and need not build them again.
+  - id: b
+    text: All application code.
+    explanation: Not correct. Application teams own their code.
+  - id: c
+    text: A manual approval for every change.
+    explanation: Not correct. This is a gate and not enablement.
+  - id: d
+    text: Only monitoring dashboards.
+    explanation: Not correct. Dashboards are one example. Enablement is wider.
+  correct_option: a
+  explanation: A platform is a set of shared capabilities that teams can use without
+    building them.
+- id: ats066-final-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read a rejection
+  source_readings:
+  - sections/section-030/module-01/course-02-supported-limits-and-actionable-feedback.md
+  prompt: A pod is refused because it exceeds a quota. Who normally has to act?
+  options:
+  - id: a
+    text: Nobody; the message is only a warning.
+    explanation: Not correct. The pod was refused.
+  - id: b
+    text: The platform team or the owner of the quota, because the ceiling is a platform
+      decision.
+    explanation: Correct. The developer asks for a higher ceiling or removes other
+      workloads.
+  - id: c
+    text: The cluster autoscaler.
+    explanation: Not correct. A quota is not a capacity problem.
+  - id: d
+    text: The kubelet.
+    explanation: Not correct. The API server refuses the pod.
+  correct_option: b
+  explanation: A clear message names the quota and who can change it.
+- id: ats066-final-q11
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose the right level
+  source_readings:
+  - sections/section-030/module-02/course-01-pod-security-admission-and-security-contexts.md
+  prompt: Which Pod Security level forbids privileged containers and requires non-root
+    users, dropped capabilities and a seccomp profile?
+  options:
+  - id: a
+    text: "`privileged`"
+    explanation: Not correct. This level allows everything.
+  - id: b
+    text: "`baseline`"
+    explanation: Not correct. It forbids known privilege escalations but does not
+      require all of these.
+  - id: c
+    text: "`restricted`"
+    explanation: Correct. It is the strictest level.
+  - id: d
+    text: "`default`"
+    explanation: Not correct. There is no level with this name.
+  correct_option: c
+  explanation: Restricted follows current hardening practice.
+- id: ats066-final-q12
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Handle Secrets by reference
+  source_readings:
+  - sections/section-030/module-02/course-02-least-privilege-deployment-identities-and-secrets.md
+  prompt: How should a manifest in a repository give a container access to a token?
+  options:
+  - id: a
+    text: By writing the base64 value in the manifest.
+    explanation: Not correct. Base64 is an encoding, not protection.
+  - id: b
+    text: By a ConfigMap with the value.
+    explanation: Not correct. A ConfigMap has no protection for secrets.
+  - id: c
+    text: By an environment variable with the value in the manifest.
+    explanation: Not correct. The value would be in the repository.
+  - id: d
+    text: By `secretKeyRef` to a Secret that exists in the cluster.
+    explanation: Correct. The manifest holds a name and a key, not the value.
+  correct_option: d
+  explanation: Keep values out of files and give access to the least number of pods.
+- id: ats066-final-q13
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define continuous integration
+  source_readings:
+  - sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
+  prompt: What does continuous integration do for every change?
+  options:
+  - id: a
+    text: Merges it into the shared code and runs automated checks.
+    explanation: Correct. Small changes that meet often are easy to check.
+  - id: b
+    text: Deploys it to production.
+    explanation: Not correct. That is deployment.
+  - id: c
+    text: Approves it by a manager.
+    explanation: Not correct. That is a gate.
+  - id: d
+    text: Builds it only once a month.
+    explanation: Not correct. The idea is the opposite.
+  correct_option: a
+  explanation: CI is frequent merging with automatic checks.
+- id: ats066-final-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Write a release record
+  source_readings:
+  - sections/section-040/module-01/course-02-delivery-deployment-and-release-identity.md
+  prompt: Which fact makes a release record verifiable against the cluster?
+  options:
+  - id: a
+    text: The name of the pipeline.
+    explanation: Not correct. It cannot be compared with the cluster.
+  - id: b
+    text: The image digest, compared with the digest the pods report.
+    explanation: Correct. The pods report the digest in `imageID`.
+  - id: c
+    text: The time of the build.
+    explanation: Not correct. A time does not identify the image.
+  - id: d
+    text: The tag alone.
+    explanation: Not correct. A tag can move.
+  correct_option: b
+  explanation: The digest can be checked after each release.
+- id: ats066-final-q15
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use a gate
+  source_readings:
+  - sections/section-040/module-02/course-01-promoting-one-artifact-through-environments.md
+  prompt: Which command makes a pipeline stop when new pods do not become ready in
+    time?
+  options:
+  - id: a
+    text: "`kubectl get pods`"
+    explanation: Not correct. It prints and exits with 0.
+  - id: b
+    text: "`kubectl describe deployment scout`"
+    explanation: Not correct. It prints and exits with 0.
+  - id: c
+    text: "`kubectl rollout status deployment/scout --timeout=60s`"
+    explanation: Correct. It exits with a non-zero code on timeout.
+  - id: d
+    text: "`kubectl rollout history deployment/scout`"
+    explanation: Not correct. It lists revisions.
+  correct_option: c
+  explanation: A pipeline reads the exit code of the status command.
+- id: ats066-final-q16
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Recover from a failed release
+  source_readings:
+  - sections/section-040/module-02/course-02-gates-rollback-and-pull-based-delivery.md
+  prompt: A rolling update with a broken image is in progress. What happens to the
+    old pods?
+  options:
+  - id: a
+    text: They are deleted at once.
+    explanation: Not correct. With `maxUnavailable` at zero that does not happen.
+  - id: b
+    text: They restart with the broken image.
+    explanation: Not correct. They keep the old image.
+  - id: c
+    text: They are paused by the scheduler.
+    explanation: Not correct. The scheduler does not do this.
+  - id: d
+    text: They keep serving until new pods are ready, so production is degraded but
+      not down.
+    explanation: Correct. The Deployment does not remove an old pod before a new one
+      is ready.
+  correct_option: d
+  explanation: The rolling update protects capacity, and the rollout gate reports
+    the failure.

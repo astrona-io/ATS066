@@ -1,0 +1,61 @@
+# Reference objects for `astrona test`. The learner writes the same objects.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scout-team
+  namespace: starfleet
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scout-deployer
+  namespace: starfleet
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scout-team-deployer
+  namespace: starfleet
+subjects:
+  - kind: ServiceAccount
+    name: scout-team
+    namespace: starfleet
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: scout-deployer
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: team-quota
+  namespace: starfleet
+spec:
+  hard:
+    pods: "6"
+    requests.cpu: 500m
+    requests.memory: 512Mi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: team-defaults
+  namespace: starfleet
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+      default:
+        memory: 128Mi

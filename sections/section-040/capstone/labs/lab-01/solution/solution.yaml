@@ -1,0 +1,35 @@
+# Reference pipeline identity for `astrona test`. The learner writes the same.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: relay-pipeline
+  namespace: live
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: relay-release
+  namespace: live
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["relay"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: relay-pipeline-release
+  namespace: live
+subjects:
+  - kind: ServiceAccount
+    name: relay-pipeline
+    namespace: live
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: relay-release

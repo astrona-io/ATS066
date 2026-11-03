@@ -1,9 +1,9 @@
 # How This Course Is Made
 
-Authors map sections to the official Certified GitOps Associate (CGOA) objectives and check mechanisms against primary documentation. They review examples for responsible components, prerequisites and meaningful failure cases.
+Paris Nakita Kejser at Astrona.io maintains this course. The authors map each section to an official CGOA objective and check each technical statement against the primary documentation of Kubernetes, Kustomize and OpenTofu.
 
-Structural checks verify reading order, section introductions, closing summaries, draft metadata and YAML question contracts. No runtime execution or laboratory validation is claimed.
+The checks are static. Tools such as `astrona validate` and `bash -n` check the configuration and the scripts of each playground and lab. The labs and playgrounds have not been run yet, and the pages do not claim that they have. Technical pages carry a draft mark until review.
 
-The [contributors](https://github.com/astrona-io/ATS066/graphs/contributors) maintain the material. To [report a mistake](https://github.com/astrona-io/ATS066/issues), identify the page and disputed statement. The [license](https://github.com/astrona-io/ATS066/blob/main/LICENSE) governs reuse.
+The [contributors page](https://github.com/astrona-io/ATS066/graphs/contributors) lists the people who maintain the material. To report a mistake, open an issue on the [issues page](https://github.com/astrona-io/ATS066/issues) and name the page and the statement. The [license](https://github.com/astrona-io/ATS066/blob/main/LICENSE) governs reuse.
 
-Objectives belong to their respective owners. Teaching and knowledge checks are original practice material. Application names are illustrative and have no special technical meaning.
+The objectives belong to The Linux Foundation and CNCF. The teaching text and the knowledge checks are original practice material and are not official exam questions.

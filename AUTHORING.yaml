@@ -1,5 +1,6 @@
+---
 version: 1
-approval: CGOA requested 2026-10-11; established reading-only scope
+approval: CGOA requested 2026-10-11; hands-on scope approved 2026-11-03
 course:
   id: ATS066
   certification:
@@ -14,18 +15,19 @@ course:
     - DevOps and DevSecOps
     - CI and CD
 defaults:
-  playground: false
-  module_lab: false
-  capstone: false
-  section_quiz: false
+  playground: true
+  module_lab: true
+  capstone: true
+  section_quiz: true
   final_quiz: true
-assessment_format: YAML question banks v1, registered in assessments/index.yaml
+assessment_format: 'YAML question banks v1: section quizzes and sections/final-domain-quiz.yaml,
+  registered in assessments/index.yaml and as quiz entries in astrona.yaml'
 sections:
 - id: section-010
   title: Configuration as Code (CaC)
   curriculum_item: Configuration as Code (CaC)
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
     title: Rolling Updates And Availability
@@ -34,75 +36,148 @@ sections:
     - Calculate surge and unavailability limits.
     - Explain readiness and capacity effects on rollout.
     - Distinguish reported progress failure from automatic recovery.
-    - Distinguish configuration as code from infrastructure provisioning and ongoing reconciliation.
+    - Distinguish configuration as code from infrastructure provisioning and ongoing
+      reconciliation.
     outline:
     - Rolling Updates And Health Gates
     - Calculating Rollout Capacity And Diagnosing Progress
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
       adapted_from: ATS001/sections/section-020/module-03/course-01-rolling-updates-and-health-gates.md
     - reading: sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
       adapted_from: ATS001/sections/section-020/module-03/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+  - id: module-02
+    title: Configuration As Versioned Input
+    objectives:
+    - Explain how a ConfigMap or Secret reaches a pod.
+    - Build a Kustomize base and overlay with a generated ConfigMap.
+    - Find drift that an apply does not remove.
+    outline:
+    - Configuration As Declared Input
+    - How A Configuration Change Reaches Pods
+    - Kustomize Overlays Diff And Drift
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-010/module-02/course-01-configuration-as-declared-input.md
+      adapted_from: 
+    - reading: sections/section-010/module-02/course-02-how-a-configuration-change-reaches-pods.md
+      adapted_from: 
+    - reading: sections/section-010/module-02/course-03-kustomize-overlays-diff-and-drift.md
+      adapted_from: 
 - id: section-020
   title: Infrastructure as Code (IaC)
   curriculum_item: Infrastructure as Code (IaC)
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
-    title: Infrastructure Declarations, Plans And External Resource Lifecycle
+    title: Declarations Plans And Resource Lifecycle
     objectives:
-    - Distinguish infrastructure as code from application configuration.
-    - Explain provider state, plan review and lifecycle risks.
-    - Assess how an infrastructure workflow maps to GitOps principles.
+    - Declare Kubernetes resources with OpenTofu.
+    - Read a plan and tell an update in place from a replacement.
+    - Explain what prevent_destroy does and does not do.
     outline:
-    - Infrastructure Declarations, Plans And External Resource Lifecycle
-    playground: false
-    module_lab: false
+    - Declaring Resources With OpenTofu
+    - Reading Plans Replacement And Lifecycle Rules
+    playground: true
+    module_lab: true
     sources:
-    - reading: sections/section-020/module-01/course-01-infrastructure-declarations-plans-and-external-resource-lifecycle.md
-      adapted_from: null
+    - reading: sections/section-020/module-01/course-01-declaring-resources-with-opentofu.md
+      adapted_from: 
+    - reading: sections/section-020/module-01/course-02-reading-plans-replacement-and-lifecycle-rules.md
+      adapted_from: 
+  - id: module-02
+    title: Drift State And Reconciliation
+    objectives:
+    - Explain what the state records.
+    - Detect drift with a plan and with refresh-only.
+    - Import existing objects and place OpenTofu next to GitOps.
+    outline:
+    - State Drift And Detection
+    - Importing Resources And The GitOps Boundary
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-020/module-02/course-01-state-drift-and-detection.md
+      adapted_from: 
+    - reading: sections/section-020/module-02/course-02-importing-resources-and-the-gitops-boundary.md
+      adapted_from: 
 - id: section-030
   title: DevOps and DevSecOps
   curriculum_item: DevOps and DevSecOps
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
-    title: Shared Ownership, Feedback And Platform Enablement
+    title: Shared Ownership Feedback And Platform Enablement
     objectives:
     - Explain DevOps and DevSecOps as collaborative practices.
-    - Distinguish platform enablement from transferring every responsibility.
-    - Reason about feedback, security and supported service boundaries.
+    - Give a team limited access, a quota and default limits.
+    - Read feedback from a refused change.
     outline:
-    - Shared Ownership, Feedback And Platform Enablement
-    playground: false
-    module_lab: false
+    - Ownership Boundaries With Namespaces And RBAC
+    - Supported Limits And Actionable Feedback
+    playground: true
+    module_lab: true
     sources:
-    - reading: sections/section-030/module-01/course-01-shared-ownership-feedback-and-platform-enablement.md
-      adapted_from: null
+    - reading: sections/section-030/module-01/course-01-ownership-boundaries-with-namespaces-and-rbac.md
+      adapted_from: 
+    - reading: sections/section-030/module-01/course-02-supported-limits-and-actionable-feedback.md
+      adapted_from: 
+  - id: module-02
+    title: Security Checks In The Delivery Path
+    objectives:
+    - Enforce Pod Security levels and repair an unsafe workload.
+    - Limit a deployment identity.
+    - Give a container a Secret by reference.
+    outline:
+    - Pod Security Admission And Security Contexts
+    - Least Privilege Deployment Identities And Secrets
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-030/module-02/course-01-pod-security-admission-and-security-contexts.md
+      adapted_from: 
+    - reading: sections/section-030/module-02/course-02-least-privilege-deployment-identities-and-secrets.md
+      adapted_from: 
 - id: section-040
   title: CI and CD
   curriculum_item: CI and CD
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
     title: Build And Release Pipelines
     objectives:
-    - Trace source changes through build, checks and artifact publication.
-    - Explain what continuous integration checks.
+    - Trace a source change through build, checks and artifact publication.
     - Distinguish continuous delivery from continuous deployment.
-    - Relate release identity to an immutable artifact.
+    - Identify a release by its image digest.
     outline:
     - Source Changes And Build Evidence
-    - Delivery, Deployment And Promotion Decisions
-    playground: false
-    module_lab: false
+    - Delivery Deployment And Release Identity
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
       adapted_from: ATS039/sections/section-010/module-01/course-01-source-changes-and-build-evidence.md
-    - reading: sections/section-040/module-01/course-02-delivery-deployment-and-promotion-decisions.md
-      adapted_from: ATS039/sections/section-010/module-01/course-02-delivery-deployment-and-promotion-decisions.md
+    - reading: sections/section-040/module-01/course-02-delivery-deployment-and-release-identity.md
+      adapted_from: 
+  - id: module-02
+    title: Promotion Delivery And Rollback
+    objectives:
+    - Promote one artifact through environments.
+    - Gate a release and roll it back.
+    - Compare push-based with pull-based delivery.
+    outline:
+    - Promoting One Artifact Through Environments
+    - Gates Rollback And Pull Based Delivery
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-040/module-02/course-01-promoting-one-artifact-through-environments.md
+      adapted_from: 
+    - reading: sections/section-040/module-02/course-02-gates-rollback-and-pull-based-delivery.md
+      adapted_from: 

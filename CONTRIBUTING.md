@@ -4,6 +4,6 @@ Read CLAUDE.md before editing. Its shared prefix is copied from ATS015, while th
 
 Preserve IDs, weights and existing track registration. Develop self-contained explanations with mechanisms, examples, prerequisites and failure reasoning. Start each section with an introduction and end each module with its own Summary. Keep technical Markdown draft until review.
 
-The maintainer explicitly requires reading-only material: no labs, playgrounds, runtime configurations or lifecycle markers. Do not claim executed results. YAML questions use the local schema and separate index; preserve stable identities and supported per-option feedback.
+The course has a playground and a graded lab for every module, a capstone lab for every section and a quiz for every section. Labs and playgrounds are built untested: run `astrona validate -c <directory>` on each one, `bash -n` on each script and a YAML parse on each configuration, and do not claim that a lab ran. Do not invent command output. YAML questions use the local schema and the index in assessments/index.yaml; preserve stable identities and per-option feedback.
 
-Use primary sources in SOURCES.md and record adaptation paths in AUTHORING.yaml. Run the preparation reading verifier and content-sync parser checks when changing structure. Review Markdown and questions for semantic correctness as well as structure.
+Use primary sources in SOURCES.md and record adaptation paths in AUTHORING.yaml. Review Markdown and questions for semantic correctness as well as structure.

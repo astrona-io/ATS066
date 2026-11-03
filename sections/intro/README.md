@@ -1,3 +1,3 @@
 # Introduction
 
-This introduction explains the Related Practices course, reading method and author review. The domain represents 16% of Certified GitOps Associate (CGOA) and belongs to ATP013. Read the welcome, requirements and authoring explanation before the technical sections.
+This introduction explains who the course is for, how to prepare your machine and how the course is made. It has three pages: the welcome, the machine setup and the description of how the content is written and checked. The technical course begins with how a Deployment replaces its pods during a rolling update.

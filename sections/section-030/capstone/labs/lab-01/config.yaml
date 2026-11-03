@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Bring A Bay To A Safe Supported State (CAPSTONE). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-capstone-030
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create bay with an unsafe relay Deployment and a Secret
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the quota, defaults, identity, repaired Deployment, labels and the record
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until exactly two relay pods are left
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: platform-record
+      description: "The ConfigMap platform-record in bay states the settings that are live: pod-security, quota-pods and deployer."
+      type: file
+      source: validation/validate-platform-record.sh
+      hint: Read the live label and quota with kubectl and write those values. Write them after the change.
+    - name: pod-security-enforced
+      description: Bay enforces and warns at the restricted level.
+      type: file
+      source: validation/validate-pod-security-enforced.sh
+      hint: Label the namespace bay with enforce and warn set to restricted.
+    - name: quota-and-defaults
+      description: Bay has a ResourceQuota (6 pods, 500m CPU requests, 512Mi memory requests) and a LimitRange with container defaults.
+      type: file
+      source: validation/validate-quota-and-defaults.sh
+      hint: Use pods 6, requests.cpu 500m and requests.memory 512Mi, and a LimitRange with container defaults.
+    - name: relay-restricted
+      description: Two relay pods run with restricted settings and read the token by reference.
+      type: file
+      source: validation/validate-relay-restricted.sh
+      hint: Use a numeric user, drop all capabilities, no privilege escalation, RuntimeDefault seccomp and a secretKeyRef for RELAY_TOKEN.
+    - name: team-access-least-privilege
+      description: Bay-team can deploy in bay and has no other rights, and its Role has no wildcard.
+      type: file
+      source: validation/validate-team-access-least-privilege.sh
+      hint: No wildcard, no secrets and no delete. Bind a Role in bay only.
+
+teardown:
+  keepCluster: false

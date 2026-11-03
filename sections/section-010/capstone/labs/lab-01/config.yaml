@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Deliver A Configuration Change Safely (CAPSTONE). Graded against the live
+# cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-capstone-010
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create namespace outpost with scout, a plain ConfigMap, a Secret and a client
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference overlay, remove the old ConfigMap and record the evidence
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until exactly three scout pods are left
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: config-generated
+      description: One generated ConfigMap scout-settings-<hash> with the new message; the old one is gone
+      type: file
+      source: validation/validate-config-generated.sh
+      hint: Use a configMapGenerator named scout-settings. Delete the old ConfigMap with the fixed name when the new one is in use.
+    - name: deployment-uses-generated-config
+      description: The Deployment and all pods read the generated ConfigMap
+      type: file
+      source: validation/validate-deployment-uses-generated-config.sh
+      hint: Kustomize rewrites the name in the Deployment for you. Apply the overlay with kubectl apply -k, and keep the label selector unchanged.
+    - name: safe-rollout-settings
+      description: maxUnavailable 0, maxSurge 1, minReadySeconds, a progress deadline and a readiness probe
+      type: file
+      source: validation/validate-safe-rollout-settings.sh
+      hint: Put the strategy and timing in a patch in the overlay. The deadline must stay above minReadySeconds.
+    - name: rollout-complete
+      description: Three updated, ready and available replicas
+      type: file
+      source: validation/validate-rollout-complete.sh
+      hint: Run kubectl rollout status and wait for it to finish. Read the Progressing condition if it stalls.
+    - name: secret-kept-out
+      description: The API key stays in the Secret and no ConfigMap holds it
+      type: file
+      source: validation/validate-secret-kept-out-of-config.sh
+      hint: Refer to the existing Secret with secretKeyRef. Do not use a secretGenerator and do not write the value in a file.
+    - name: release-evidence
+      description: The ConfigMap release-evidence matches the live cluster
+      type: file
+      source: validation/validate-release-evidence.sh
+      hint: Read the generated name and the revision from the cluster after the rollout, and write the time in UTC.
+
+teardown:
+  keepCluster: false

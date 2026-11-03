@@ -1,0 +1,69 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Release An Artifact With Verifiable Evidence (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-040-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the Starfleet workloads; no release record exists
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Annotate, label the template and write the release record from the pod digest
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until exactly two scout pods are left
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: change-cause-recorded
+      description: The scout Deployment has a change-cause annotation that names rev-0042.
+      type: file
+      source: validation/validate-change-cause-recorded.sh
+      hint: Annotate the Deployment with kubernetes.io/change-cause and a text that names rev-0042.
+    - name: digest-matches-pods
+      description: The digest in the release record equals the digest that every running scout pod reports in its imageID.
+      type: file
+      source: validation/validate-digest-matches-pods.sh
+      hint: "Read imageID from the pod status and copy the part from sha256: to the end."
+    - name: pods-labelled-with-release
+      description: The pod template and both running pods carry the label release=rev-0042.
+      type: file
+      source: validation/validate-pods-labelled-with-release.sh
+      hint: "Patch spec.template.metadata.labels with release: rev-0042 and wait for the rollout."
+    - name: release-record
+      description: ConfigMap release-scout in starfleet holds version, digest, source-revision rev-0042 and approved-by.
+      type: file
+      source: validation/validate-release-record.sh
+      hint: Create the ConfigMap release-scout with version, digest, source-revision rev-0042 and approved-by.
+    - name: rollout-complete
+      description: Scout has two available replicas, the original image, and no pod without the release label is left.
+      type: file
+      source: validation/validate-rollout-complete.sh
+      hint: Do not change the image or the replicas. Wait until both pods are updated and available.
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,158 @@
+# Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats066-040
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-040
+  title: CI and CD
+questions:
+- id: ats066-040-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Separate delivery from deployment
+  source_readings:
+  - sections/section-040/module-01/course-02-delivery-deployment-and-release-identity.md
+  prompt: A pipeline checks every change automatically, but a person must approve
+    the last step before production. Which practice is this?
+  options:
+  - id: a
+    text: Continuous delivery.
+    explanation: Correct. Every checked change is ready and a person decides when.
+  - id: b
+    text: Continuous deployment.
+    explanation: Not correct. Continuous deployment has no approval step.
+  - id: c
+    text: Continuous integration only.
+    explanation: Not correct. CI covers the merge and the checks and does not decide
+      on a release.
+  - id: d
+    text: Blue-green deployment.
+    explanation: Not correct. That is a release technique and does not describe an
+      approval.
+  correct_option: a
+  explanation: A manual gate before production makes the path continuous delivery.
+- id: ats066-040-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Prefer a digest over a tag
+  source_readings:
+  - sections/section-040/module-01/course-02-delivery-deployment-and-release-identity.md
+  prompt: Why does a release record hold the image digest and not only the tag?
+  options:
+  - id: a
+    text: A digest is shorter and easier to read.
+    explanation: Not correct. A digest is long. The reason is identity, not length.
+  - id: b
+    text: A digest names exactly one image, while a tag can be moved to another image.
+    explanation: Correct. The digest is computed from the content.
+  - id: c
+    text: A tag cannot be used in a Deployment.
+    explanation: Not correct. Tags work, but they can move.
+  - id: d
+    text: A digest makes the image pull faster.
+    explanation: Not correct. It does not change the speed.
+  correct_option: b
+  explanation: A tag is a label that can be changed. The digest identifies the content.
+- id: ats066-040-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read what a passing check proves
+  source_readings:
+  - sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
+  prompt: A check runs `kubectl apply --dry-run=server` and passes. What does this
+    prove?
+  options:
+  - id: a
+    text: The image has no known vulnerabilities.
+    explanation: Not correct. A dry run does not scan the image.
+  - id: b
+    text: The application passes its tests.
+    explanation: Not correct. No test ran.
+  - id: c
+    text: The API server would accept the object; it does not prove that the image
+      is safe or the application works.
+    explanation: Correct. A dry run goes through admission and stores nothing.
+  - id: d
+    text: The cluster has enough capacity.
+    explanation: Not correct. The check does not look at capacity.
+  correct_option: c
+  explanation: Each check covers one boundary. Say what it proves and what it does
+    not.
+- id: ats066-040-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Promote one artifact
+  source_readings:
+  - sections/section-040/module-02/course-01-promoting-one-artifact-through-environments.md
+  prompt: Why should production run the same image that staging tested instead of
+    a new build from the same source?
+  options:
+  - id: a
+    text: A rebuild is not allowed in Kubernetes.
+    explanation: Not correct. Nothing forbids it. The risk is the missing evidence.
+  - id: b
+    text: Production does not accept new images.
+    explanation: Not correct. It does accept them.
+  - id: c
+    text: Staging and production must use the same replica count.
+    explanation: Not correct. They often differ in configuration.
+  - id: d
+    text: A new build is a new artifact, and the staging test evidence does not apply
+      to it.
+    explanation: Correct. Only the configuration may differ.
+  correct_option: d
+  explanation: Build once and promote the same artifact. Put the differences into
+    configuration.
+- id: ats066-040-q05
+  type: single_choice
+  difficulty: advanced
+  learning_objective: State what a rollback restores
+  source_readings:
+  - sections/section-040/module-02/course-02-gates-rollback-and-pull-based-delivery.md
+  prompt: After `kubectl rollout undo deployment/scout`, which part of the earlier
+    release is restored?
+  options:
+  - id: a
+    text: The pod template of the earlier revision.
+    explanation: Correct. Other objects, such as a ConfigMap, are not changed.
+  - id: b
+    text: The ConfigMap and the Secret that the release changed.
+    explanation: Not correct. The undo does not touch other objects.
+  - id: c
+    text: The replica count of every Deployment in the namespace.
+    explanation: Not correct. It only touches this Deployment's template.
+  - id: d
+    text: The state of the database.
+    explanation: Not correct. Kubernetes does not manage that.
+  correct_option: a
+  explanation: A rollback is a new revision with the old template. Keep configuration
+    versioned together with the Deployment.
+- id: ats066-040-q06
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Compare push and pull delivery
+  source_readings:
+  - sections/section-040/module-02/course-02-gates-rollback-and-pull-based-delivery.md
+  prompt: In which place do the cluster credentials live in a pull-based GitOps delivery?
+  options:
+  - id: a
+    text: In the pipeline outside the cluster.
+    explanation: Not correct. This is the push model.
+  - id: b
+    text: Inside the cluster, with an agent that reads the repository.
+    explanation: Correct. The pipeline only commits a change.
+  - id: c
+    text: In the repository, next to the manifests.
+    explanation: Not correct. Credentials must not be committed.
+  - id: d
+    text: With every developer.
+    explanation: Not correct. This would widen access.
+  correct_option: b
+  explanation: A pull agent applies the change from inside, so the pipeline needs
+    no cluster credentials.

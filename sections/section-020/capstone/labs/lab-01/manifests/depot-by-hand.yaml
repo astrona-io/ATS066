@@ -1,0 +1,13 @@
+# Objects made by hand. The seed script creates them with `kubectl create`.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: depot
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: depot-settings
+  namespace: depot
+data:
+  tier: bronze

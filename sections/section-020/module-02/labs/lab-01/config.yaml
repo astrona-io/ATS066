@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Import Hand-Made Objects And Reconcile Drift (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-020-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create hand-made objects in hangar and record their unique identifiers in a ConfigMap
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Reach the end state of the OpenTofu files with kubectl patches that keep the objects
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until exactly two beacon pods are running
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: beacon-reconciled
+      description: Beacon has 2 replicas, all available, the original image and exactly 2 pods that are not terminating (no drift left).
+      type: file
+      source: validation/validate-beacon-reconciled.sh
+      hint: The hand-made scale is drift. Declare two replicas and apply so the extra pod is removed.
+    - name: managed-labels
+      description: The namespace, the ConfigMap and the Deployment carry the label managed-by=opentofu from the OpenTofu files.
+      type: file
+      source: validation/validate-managed-labels.sh
+      hint: Declare the label managed-by = "opentofu" in each resource and apply the plan.
+    - name: objects-imported
+      description: The namespace, the ConfigMap and the Deployment are the objects that existed at the start (same unique identifiers), so they were imported and not deleted and created again.
+      type: file
+      source: validation/validate-objects-imported.sh
+      hint: Use import blocks with ids such as hangar/hangar-settings and the id hangar for the namespace. Do not delete the objects.
+    - name: settings-reconciled
+      description: Hangar-settings holds mode=active and owner=platform.
+      type: file
+      source: validation/validate-settings-reconciled.sh
+      hint: The declared data wins. Plan again to see the difference to the live ConfigMap and apply it.
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Roll Back A Failed Release And Promote Correctly (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-040-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create staging and production, then push a failed release to production
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Undo the failed revision, label both templates and write the promotion record
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until staging has one and production has two scout pods
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: environments-keep-own-settings
+      description: Each environment keeps its replica count, its own ConfigMap value and the envFrom reference.
+      type: file
+      source: validation/validate-environments-keep-own-settings.sh
+      hint: Do not touch replicas, images or the ConfigMaps. Patch only the template label.
+    - name: production-rolled-back
+      description: Production scout uses the good image, has two available replicas and no pod that tries to run the broken image.
+      type: file
+      source: validation/validate-production-rolled-back.sh
+      hint: Use kubectl rollout undo in the production namespace and wait until two replicas are available.
+    - name: promotion-record
+      description: ConfigMap promotion-record in production has release=r2, from=staging and the digest that the production pods report.
+      type: file
+      source: validation/validate-promotion-record.sh
+      hint: Create promotion-record in production with release r2, from staging and the live digest.
+    - name: release-in-both-environments
+      description: The template label release=r2 is set in staging and production, and the running pods carry it (one in staging, two in production).
+      type: file
+      source: validation/validate-release-in-both-environments.sh
+      hint: "Add release: r2 to the pod template in staging first, then in production."
+    - name: same-digest-in-both
+      description: Every running scout pod in staging and production reports the same image digest.
+      type: file
+      source: validation/validate-same-digest-in-both.sh
+      hint: Both environments must run the same image. Do not change the image field.
+
+teardown:
+  keepCluster: false

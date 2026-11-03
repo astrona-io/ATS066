@@ -1,0 +1,48 @@
+# The namespace dockyard with an unsafe scout Deployment (root user, privileged
+# container) and the Secret scout-token. No Pod Security label is set.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dockyard
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: scout-token
+  namespace: dockyard
+type: Opaque
+stringData:
+  token: ensign-7f3a91
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scout
+  namespace: dockyard
+  labels:
+    app: scout
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scout
+  template:
+    metadata:
+      labels:
+        app: scout
+    spec:
+      containers:
+        - name: scout
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          securityContext:
+            privileged: true
+            runAsUser: 0
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi

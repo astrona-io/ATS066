@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Applies the reference solution. Run only by `astrona test`.
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+kubectl apply -f "$DIR/solution.yaml"
+kubectl -n starfleet label deployment scout owner=scout-team --overwrite
+echo "[solution] Applied."

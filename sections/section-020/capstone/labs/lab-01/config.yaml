@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Bring A Hand-Made Depot Under OpenTofu (CAPSTONE). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-capstone-020
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the namespace depot and a ConfigMap by hand and record their unique identifiers
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Reach the end state of the OpenTofu files with kubectl, keeping the imported objects
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until exactly two relay pods are running
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: imported-objects
+      description: The namespace depot and the ConfigMap depot-settings keep their unique identifiers and carry the label managed-by=opentofu.
+      type: file
+      source: validation/validate-imported-objects.sh
+      hint: Import the namespace and the ConfigMap, do not recreate them. Add the label managed-by = "opentofu" in the files.
+    - name: quota-declared
+      description: ResourceQuota depot-quota allows 10 pods and carries managed-by=opentofu.
+      type: file
+      source: validation/validate-quota-declared.sh
+      hint: Declare kubernetes_resource_quota_v1 with hard pods = "10" and the managed-by label.
+    - name: relay-deployment
+      description: Deployment relay has 2 replicas, all available, the pinned image, envFrom of depot-settings, the label managed-by=opentofu and exactly 2 pods that are not terminating (the manual scale to 3 was reverted).
+      type: file
+      source: validation/validate-relay-deployment.sh
+      hint: Two replicas, the pinned image and envFrom of depot-settings. Declared replicas remove the manual scale.
+    - name: relay-service
+      description: Service relay selects app=relay, exposes port 80 to target port 9898 and carries managed-by=opentofu.
+      type: file
+      source: validation/validate-relay-service.sh
+      hint: Select app=relay, port 80 and target port 9898, with the managed-by label.
+    - name: settings-tier-gold
+      description: Depot-settings holds tier=gold.
+      type: file
+      source: validation/validate-settings-tier-gold.sh
+      hint: Change tier to gold in the file and apply. Read the plan first and confirm it is an update in place.
+
+teardown:
+  keepCluster: false

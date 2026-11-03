@@ -1,0 +1,45 @@
+# Objects made by hand during an incident. The seed script creates them with
+# `kubectl create`, so no OpenTofu state knows them.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hangar
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hangar-settings
+  namespace: hangar
+data:
+  mode: manual
+  owner: nobody
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beacon
+  namespace: hangar
+  labels:
+    app: beacon
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: beacon
+  template:
+    metadata:
+      labels:
+        app: beacon
+    spec:
+      containers:
+        - name: beacon
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - containerPort: 9898
+          envFrom:
+            - configMapRef:
+                name: hangar-settings
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi

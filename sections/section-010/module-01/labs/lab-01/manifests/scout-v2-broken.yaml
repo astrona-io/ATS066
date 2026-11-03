@@ -1,0 +1,16 @@
+# Strategic merge patch applied by the bootstrap script. It is the release that
+# the lab starts with: the new message is the intended change, but the
+# readiness probe points at a path that podinfo does not serve, so no new pod
+# ever becomes ready.
+spec:
+  template:
+    spec:
+      containers:
+        - name: scout
+          env:
+            - name: PODINFO_UI_MESSAGE
+              value: "scout v2"
+          readinessProbe:
+            httpGet:
+              path: /missing
+              port: http

@@ -1,0 +1,101 @@
+# Two environments as namespaces: preview and live. Each has a ConfigMap
+# relay-settings and a relay Deployment that reads it. Same image.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: preview
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: live
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: relay-settings
+  namespace: preview
+data:
+  environment: preview
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: relay-settings
+  namespace: live
+data:
+  environment: live
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relay
+  namespace: preview
+  labels:
+    app: relay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: relay
+  template:
+    metadata:
+      labels:
+        app: relay
+    spec:
+      containers:
+        - name: relay
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          envFrom:
+            - configMapRef:
+                name: relay-settings
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relay
+  namespace: live
+  labels:
+    app: relay
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: relay
+  template:
+    metadata:
+      labels:
+        app: relay
+    spec:
+      containers:
+        - name: relay
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          envFrom:
+            - configMapRef:
+                name: relay-settings
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi

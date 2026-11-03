@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Declare A Hangar With OpenTofu (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-020-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the Starfleet workloads; the namespace hangar does not exist
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Create the hangar objects that the reference OpenTofu files declare, with kubectl
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until exactly two beacon pods are running
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: beacon-deployment
+      description: Deployment beacon has 2 available replicas, the pinned image, the label app=beacon and reads hangar-settings with envFrom.
+      type: file
+      source: validation/validate-beacon-deployment.sh
+      hint: Use kubernetes_deployment_v1 with envFrom of the ConfigMap, the pinned image and two replicas.
+    - name: namespace-declared
+      description: The namespace hangar exists with the label managed-by=opentofu.
+      type: file
+      source: validation/validate-namespace-declared.sh
+      hint: Declare kubernetes_namespace_v1 with metadata labels managed-by = "opentofu".
+    - name: pods-read-active-mode
+      description: Every running beacon pod has the environment variable mode=active. A pod that started before the ConfigMap changed still shows the old value.
+      type: file
+      source: validation/validate-pods-read-active-mode.sh
+      hint: A running container never sees a changed environment variable. Restart the Deployment so both pods read mode=active.
+    - name: settings-configmap
+      description: The ConfigMap hangar-settings has mode=active, owner=platform and the label managed-by=opentofu.
+      type: file
+      source: validation/validate-settings-configmap.sh
+      hint: Declare kubernetes_config_map_v1 with data mode and owner, and refer to the namespace resource for its namespace.
+
+teardown:
+  keepCluster: false

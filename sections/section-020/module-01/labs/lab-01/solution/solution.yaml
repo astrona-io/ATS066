@@ -1,0 +1,46 @@
+# Equivalent objects for `astrona test`, which does not need OpenTofu. The
+# learner creates the same objects with the files in solution/files.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hangar
+  labels:
+    managed-by: opentofu
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hangar-settings
+  namespace: hangar
+  labels:
+    managed-by: opentofu
+data:
+  mode: active
+  owner: platform
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beacon
+  namespace: hangar
+  labels:
+    app: beacon
+    managed-by: opentofu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: beacon
+  template:
+    metadata:
+      labels:
+        app: beacon
+    spec:
+      containers:
+        - name: beacon
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - containerPort: 9898
+          envFrom:
+            - configMapRef:
+                name: hangar-settings

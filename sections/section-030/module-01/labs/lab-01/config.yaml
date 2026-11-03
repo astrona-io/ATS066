@@ -1,0 +1,69 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Build A Platform Contract For An Application Team (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-030-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create the Starfleet workloads; no identity, role, quota or default limits exist
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference identity, Role, quota and LimitRange and label the owner
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until scout has two available replicas
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: default-limits
+      description: A LimitRange in starfleet gives containers a default CPU request of 50m, a default memory request of 64Mi and a default memory limit of 128Mi.
+      type: file
+      source: validation/validate-default-limits.sh
+      hint: Use a LimitRange of type Container with defaultRequest cpu 50m and memory 64Mi and default memory 128Mi.
+    - name: owner-label
+      description: The scout Deployment has the label owner=scout-team and still has two available replicas.
+      type: file
+      source: validation/validate-owner-label.sh
+      hint: Run kubectl label on the Deployment. A label on the Deployment does not start new pods.
+    - name: quota
+      description: A ResourceQuota in starfleet limits pods to 6, CPU requests to 500m and memory requests to 512Mi.
+      type: file
+      source: validation/validate-quota.sh
+      hint: Use hard pods "6", requests.cpu 500m and requests.memory 512Mi.
+    - name: role-bound-without-wildcards
+      description: The RoleBinding gives a Role of starfleet to scout-team, and no rule of that Role uses a wildcard.
+      type: file
+      source: validation/validate-role-bound-without-wildcards.sh
+      hint: Bind the ServiceAccount with a RoleBinding to a Role in starfleet and list exact verbs and resources.
+    - name: team-access
+      description: Scout-team can deploy in starfleet and nothing more.
+      type: file
+      source: validation/validate-team-access.sh
+      hint: Give create, update, patch, get, list and watch on deployments, read on pods and services and get on pods/log. Do not give delete or secrets.
+
+teardown:
+  keepCluster: false

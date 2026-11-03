@@ -1,0 +1,173 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats066-030
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-030
+  title: DevOps and DevSecOps
+questions:
+- id: ats066-030-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Use impersonation to test access
+  source_readings:
+  - sections/section-030/module-01/course-01-ownership-boundaries-with-namespaces-and-rbac.md
+  prompt: Which command asks whether the ServiceAccount `scout-team` in `starfleet`
+    may patch Deployments in that namespace?
+  options:
+  - id: a
+    text: "`kubectl auth can-i patch deployments -n starfleet --as=system:serviceaccount:starfleet:scout-team`"
+    explanation: Correct. The `--as` option makes the API server answer for another
+      identity.
+  - id: b
+    text: "`kubectl get rolebinding scout-team -n starfleet`"
+    explanation: Not correct. This lists a binding. It does not answer a question
+      about one action.
+  - id: c
+    text: "`kubectl describe serviceaccount scout-team`"
+    explanation: Not correct. This shows the account and not what it may do.
+  - id: d
+    text: "`kubectl auth whoami`"
+    explanation: Not correct. This prints the identity of the caller and not the rights
+      of another one.
+  correct_option: a
+  explanation: "`kubectl auth can-i` sends an authorisation question to the API server,
+    and `--as` makes it ask for another identity."
+- id: ats066-030-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find where a quota failure appears
+  source_readings:
+  - sections/section-030/module-01/course-02-supported-limits-and-actionable-feedback.md
+  prompt: A namespace quota allows 6 pods and 5 exist. A developer runs `kubectl scale
+    deployment scout --replicas=8`. What happens?
+  options:
+  - id: a
+    text: The command fails at once with a Forbidden message.
+    explanation: Not correct. The quota is checked when pods are created, not when
+      the replica number is stored.
+  - id: b
+    text: The command succeeds, and `FailedCreate` events on the ReplicaSet say the
+      quota is exceeded.
+    explanation: Correct. The Deployment accepts the number; the pod creation fails
+      later.
+  - id: c
+    text: Kubernetes starts all 8 pods and removes the extra ones later.
+    explanation: Not correct. The quota check refuses pods above the ceiling.
+  - id: d
+    text: The Deployment is deleted.
+    explanation: Not correct. A quota never deletes objects.
+  correct_option: b
+  explanation: The scale command only changes a number in the Deployment. The ReplicaSet
+    controller then tries to create pods, and the API server refuses the ones above
+    the ceiling.
+- id: ats066-030-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why a LimitRange belongs with a quota
+  source_readings:
+  - sections/section-030/module-01/course-02-supported-limits-and-actionable-feedback.md
+  prompt: A namespace has a quota on `requests.cpu`. A pod without a CPU request is
+    applied. What happens if a LimitRange with a default request exists?
+  options:
+  - id: a
+    text: The pod is rejected, because the field is missing.
+    explanation: Not correct. This is what happens without a default.
+  - id: b
+    text: The pod is accepted with no request and does not count against the quota.
+    explanation: Not correct. With a default, the quota counts the default request.
+  - id: c
+    text: The pod is accepted and receives the default request.
+    explanation: Correct. The LimitRange admission step fills in the default before
+      the quota is checked.
+  - id: d
+    text: The quota is ignored for that pod.
+    explanation: Not correct. The quota still applies.
+  correct_option: c
+  explanation: Defaults and quotas work together. The default removes a field that
+    the developer would otherwise have to know.
+- id: ats066-030-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose a Pod Security mode
+  source_readings:
+  - sections/section-030/module-02/course-01-pod-security-admission-and-security-contexts.md
+  prompt: A platform team wants to see which pods would break under `restricted` without
+    refusing anything. Which label do they set?
+  options:
+  - id: a
+    text: "`pod-security.kubernetes.io/enforce: restricted`"
+    explanation: Not correct. Enforce refuses a pod that violates the level.
+  - id: b
+    text: "`pod-security.kubernetes.io/enforce: privileged`"
+    explanation: Not correct. The privileged level allows everything.
+  - id: c
+    text: "`pod-security.kubernetes.io/version: latest`"
+    explanation: Not correct. This label selects the version of the standard and sets
+      no mode.
+  - id: d
+    text: "`pod-security.kubernetes.io/warn: restricted`"
+    explanation: Correct. The warn mode accepts the pod and returns a warning to the
+      user.
+  correct_option: d
+  explanation: The three modes are enforce, audit and warn. Warn shows the violation
+    to the user and still accepts the pod.
+- id: ats066-030-q05
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Diagnose runAsNonRoot with a named user
+  source_readings:
+  - sections/section-030/module-02/course-01-pod-security-admission-and-security-contexts.md
+  prompt: 'A container sets `runAsNonRoot: true` and the image names its user `app`
+    instead of a number. What happens?'
+  options:
+  - id: a
+    text: The kubelet cannot verify the user, so the container fails to start until
+      a numeric `runAsUser` is set.
+    explanation: Correct. The check needs a numeric user.
+  - id: b
+    text: The container starts as `app` without a check.
+    explanation: Not correct. The kubelet must prove the user is not root and cannot
+      do it for a name.
+  - id: c
+    text: The container starts as root.
+    explanation: Not correct. The setting is meant to stop exactly that.
+  - id: d
+    text: The API server rejects the Deployment.
+    explanation: Not correct. The failure appears when the kubelet starts the container.
+  correct_option: a
+  explanation: A non-numeric user cannot be checked. Set a numeric `runAsUser`, for
+    example 10001.
+- id: ats066-030-q06
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Limit a Role to one named Deployment
+  source_readings:
+  - sections/section-030/module-02/course-02-least-privilege-deployment-identities-and-secrets.md
+  prompt: 'A Role has the rule `resources: [deployments]`, `resourceNames: [scout]`,
+    `verbs: [list]`. What does it allow?'
+  options:
+  - id: a
+    text: Listing only the Deployment `scout`.
+    explanation: Not correct. A list covers the whole collection, so the name limit
+      does not apply.
+  - id: b
+    text: Nothing useful for listing, because list and watch cannot be limited to
+      a name in a useful way.
+    explanation: Correct. A list request is for the collection, so a rule limited
+      by name does not match it.
+  - id: c
+    text: Listing every Deployment in the cluster.
+    explanation: Not correct. A Role is limited to one namespace.
+  - id: d
+    text: Listing and deleting `scout`.
+    explanation: Not correct. The rule names no delete verb.
+  correct_option: b
+  explanation: Use `resourceNames` for get, patch and update, and give list and watch
+    in a separate rule.

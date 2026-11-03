@@ -1,0 +1,178 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats066-020
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-020
+  title: Infrastructure as Code (IaC)
+questions:
+- id: ats066-020-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Read the exit codes of a plan that detects drift
+  source_readings:
+  - sections/section-020/module-02/course-01-state-drift-and-detection.md
+  prompt: A scheduled job runs `tofu plan -detailed-exitcode`. Which exit code tells
+    the job that the plan contains changes?
+  options:
+  - id: a
+    text: '2'
+    explanation: Correct. The job should stop treating 2 as a failure; it means the
+      plan is not empty.
+  - id: b
+    text: '0'
+    explanation: Not correct. Exit code 0 means that the plan is empty, with nothing
+      to change.
+  - id: c
+    text: '1'
+    explanation: Not correct. Exit code 1 means that the command failed with an error.
+  - id: d
+    text: '3'
+    explanation: Not correct. The command does not use exit code 3.
+  correct_option: a
+  explanation: With `-detailed-exitcode`, 0 means no changes, 1 means an error and
+    2 means a non-empty plan.
+- id: ats066-020-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Recognise a replacement in a plan
+  source_readings:
+  - sections/section-020/module-01/course-02-reading-plans-replacement-and-lifecycle-rules.md
+  prompt: In a plan, a ConfigMap line shows `-/+` and the comment `# forces replacement`
+    on the `name` field. What will `tofu apply` do to that ConfigMap?
+  options:
+  - id: a
+    text: Update it in place and keep the same unique identifier.
+    explanation: Not correct. An update in place is marked with `~`, not with `-/+`.
+  - id: b
+    text: Destroy it and create a new one with the new name.
+    explanation: Correct. A change of an identity field makes the provider replace
+      the object; the Deployment that refers to the name also changes.
+  - id: c
+    text: Skip it, because a replacement needs a separate command.
+    explanation: Not correct. The plan lists what the apply will do. A replacement
+      is part of it.
+  - id: d
+    text: Import the old object under the new name.
+    explanation: Not correct. An import needs an `import` block and does not rename
+      an object.
+  correct_option: b
+  explanation: The marker `-/+` is destroy and create. The comment names the field
+    that forces it, so search a plan for `forces replacement`.
+- id: ats066-020-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what prevent_destroy does and does not do
+  source_readings:
+  - sections/section-020/module-01/course-02-reading-plans-replacement-and-lifecycle-rules.md
+  prompt: A resource has `lifecycle { prevent_destroy = true }`. Which action does
+    this setting stop?
+  options:
+  - id: a
+    text: A `kubectl delete` of the same object.
+    explanation: Not correct. The rule lives in the files and is only read by OpenTofu.
+      It does not reach the cluster.
+  - id: b
+    text: Removal of the lifecycle block from the file.
+    explanation: Not correct. Someone can delete the block, and then the next plan
+      can destroy the resource.
+  - id: c
+    text: A plan or apply run by OpenTofu that would destroy the resource.
+    explanation: Correct. The setting stops OpenTofu with an error; it is not a lock
+      in the cluster.
+  - id: d
+    text: Any change to the object, including updates in place.
+    explanation: Not correct. Updates in place are allowed. Only destruction is blocked.
+  correct_option: c
+  explanation: "`prevent_destroy` makes OpenTofu refuse a plan that destroys the resource.
+    It does not protect the object from other tools or from an edit of the file."
+- id: ats066-020-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use an import block to adopt an existing object
+  source_readings:
+  - sections/section-020/module-02/course-02-importing-resources-and-the-gitops-boundary.md
+  prompt: A ConfigMap `settings` in the namespace `hangar` was made by hand. Which
+    block lets OpenTofu manage it without creating a new object?
+  options:
+  - id: a
+    text: A `moved` block that renames the live object.
+    explanation: Not correct. A moved block changes an address in the state. It does
+      not adopt a live object.
+  - id: b
+    text: A second resource block with the same name.
+    explanation: Not correct. Two blocks with the same address are an error and do
+      not adopt anything.
+  - id: c
+    text: "`prevent_destroy` on a resource block with the same name."
+    explanation: Not correct. A lifecycle rule does not link a real object to an address.
+  - id: d
+    text: An `import` block with `id = "hangar/settings"` and the address of a matching
+      resource block.
+    explanation: Correct. The identity of a namespaced Kubernetes object has the form
+      namespace/name.
+  correct_option: d
+  explanation: An import block links a real identity to a resource address. The plan
+    then shows an update when the files and the object differ.
+- id: ats066-020-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain refresh-only
+  source_readings:
+  - sections/section-020/module-02/course-01-state-drift-and-detection.md
+  prompt: What does `tofu apply -refresh-only` change?
+  options:
+  - id: a
+    text: The state, so that it matches the real objects; the objects themselves are
+      not changed.
+    explanation: Correct. It accepts the real values into the state and leaves the
+      cluster alone.
+  - id: b
+    text: The real objects, so that they match the files.
+    explanation: Not correct. A normal apply does this. Refresh-only never changes
+      the objects.
+  - id: c
+    text: The files, so that they match the real objects.
+    explanation: Not correct. OpenTofu does not edit your files.
+  - id: d
+    text: Nothing; it only prints the differences.
+    explanation: Not correct. It writes the refreshed values into the state.
+  correct_option: a
+  explanation: A refresh-only apply updates the state and proposes no change to the
+    objects. The files still differ from the cluster until someone decides what to
+    do.
+- id: ats066-020-q06
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Place an OpenTofu workflow against the GitOps principles
+  source_readings:
+  - sections/section-020/module-02/course-02-importing-resources-and-the-gitops-boundary.md
+  prompt: A team runs `tofu apply` from a pipeline when a commit reaches the main
+    branch. Which GitOps principle does this workflow meet less well than an agent
+    in the cluster that compares continuously?
+  options:
+  - id: a
+    text: Declarative description, because the files declare the desired state.
+    explanation: Not correct. The files are declarative, so this principle is met.
+  - id: b
+    text: Continuous reconciliation, because it corrects drift only when someone runs
+      it.
+    explanation: Correct. Between runs nothing corrects a change that someone made
+      by hand.
+  - id: c
+    text: Versioned and immutable storage, because the files are in a repository.
+    explanation: Not correct. The repository stores the versions, so this principle
+      is met.
+  - id: d
+    text: Pulled automatically, because the cluster pulls the files.
+    explanation: Not correct. In this workflow a pipeline pushes. That is a related
+      gap, but the principle about correction of drift is the one that is least met.
+  correct_option: b
+  explanation: OpenTofu applies when it is run. A scheduled plan can detect drift,
+    but a continuous agent corrects it without a person starting a run.

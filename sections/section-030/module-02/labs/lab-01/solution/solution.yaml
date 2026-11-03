@@ -1,0 +1,81 @@
+# Reference objects for `astrona test`. The learner writes the same objects.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scout
+  namespace: dockyard
+  labels:
+    app: scout
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scout
+  template:
+    metadata:
+      labels:
+        app: scout
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: scout
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          env:
+            - name: SCOUT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: scout-token
+                  key: token
+          securityContext:
+            runAsUser: 10001
+            allowPrivilegeEscalation: false
+            privileged: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scout-deploy
+  namespace: dockyard
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scout-update
+  namespace: dockyard
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["scout"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scout-deploy-update
+  namespace: dockyard
+subjects:
+  - kind: ServiceAccount
+    name: scout-deploy
+    namespace: dockyard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: scout-update

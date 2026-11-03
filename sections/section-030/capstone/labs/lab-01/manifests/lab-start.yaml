@@ -1,0 +1,48 @@
+# The namespace bay with an unsafe relay Deployment (root user, privileged
+# container), a Secret relay-token and nothing else.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bay
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: relay-token
+  namespace: bay
+type: Opaque
+stringData:
+  token: cadet-52b8e0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relay
+  namespace: bay
+  labels:
+    app: relay
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: relay
+  template:
+    metadata:
+      labels:
+        app: relay
+    spec:
+      containers:
+        - name: relay
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          securityContext:
+            privileged: true
+            runAsUser: 0
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi

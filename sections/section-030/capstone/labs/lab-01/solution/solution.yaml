@@ -1,0 +1,115 @@
+# Reference objects for `astrona test`. The learner writes the same objects.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: bay-quota
+  namespace: bay
+spec:
+  hard:
+    pods: "6"
+    requests.cpu: 500m
+    requests.memory: 512Mi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: bay-defaults
+  namespace: bay
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+      default:
+        memory: 128Mi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bay-team
+  namespace: bay
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: bay-deployer
+  namespace: bay
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bay-team-deployer
+  namespace: bay
+subjects:
+  - kind: ServiceAccount
+    name: bay-team
+    namespace: bay
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: bay-deployer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relay
+  namespace: bay
+  labels:
+    app: relay
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: relay
+  template:
+    metadata:
+      labels:
+        app: relay
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: relay
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898
+          env:
+            - name: RELAY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: relay-token
+                  key: token
+          securityContext:
+            runAsUser: 10001
+            allowPrivilegeEscalation: false
+            privileged: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: platform-record
+  namespace: bay
+data:
+  pod-security: restricted
+  quota-pods: "6"
+  deployer: bay-team

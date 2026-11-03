@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Recover Production And Promote A Release With Evidence (CAPSTONE). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-capstone-040
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create preview and live, then push a failed release to live
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Undo, annotate, promote, write the record and apply the pipeline identity
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until preview has one and live has two relay pods
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: live-recovered
+      description: Live relay uses the good image, has two available replicas and no pod that tries to run the broken image.
+      type: file
+      source: validation/validate-live-recovered.sh
+      hint: Undo the failed revision in live and wait for two available replicas.
+    - name: pipeline-identity
+      description: Relay-pipeline in live can update only the Deployment relay, cannot read Secrets or touch preview, and has no token mounted by default.
+      type: file
+      source: validation/validate-pipeline-identity.sh
+      hint: Use resourceNames for relay, set automountServiceAccountToken false and do not allow secrets.
+    - name: release-promoted
+      description: Release=r3 is on the template and the pods in preview (one) and live (two), and replicas and settings are untouched.
+      type: file
+      source: validation/validate-release-promoted.sh
+      hint: "Add release: r3 to the template in preview, wait, and then in live. Keep replicas and settings."
+    - name: release-record
+      description: ConfigMap release-relay in live holds version r3, source-revision rev-0107, an approver and the digest that the live pods report; and the Deployment names rev-0107 in its change cause.
+      type: file
+      source: validation/validate-release-record.sh
+      hint: Write release-relay in live with the digest that the live pods report, and annotate the Deployment with rev-0107.
+    - name: same-digest-in-both
+      description: Every running relay pod in preview and live reports the same digest.
+      type: file
+      source: validation/validate-same-digest-in-both.sh
+      hint: Do not change the image. Both environments must report one digest.
+
+teardown:
+  keepCluster: false

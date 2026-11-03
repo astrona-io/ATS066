@@ -1,9 +1,10 @@
-# Reading-only content; YAML knowledge checks have a separate index.
+# Reading, playgrounds, labs and quizzes. All labs and playgrounds are untested: static checks only.
 training:
   id: ATS066
   title: 'CGOA: Related Practices'
-  description: 'Detailed reading material and reusable YAML knowledge checks for CGOA: Related Practices.
-    Technical content remains draft. No labs or playgrounds.'
+  description: 'Reading material, labs, playgrounds and knowledge checks for CGOA:
+    Related Practices. Technical content is draft, and the labs have not been run
+    yet.'
   certification:
     name: Certified GitOps Associate
     code: CGOA
@@ -18,7 +19,7 @@ training:
 modules:
 - id: module-intro
   title: Introduction
-  description: Audience, reading method and review process.
+  description: Audience, the tools you need and how the course is built.
   content:
   - type: reading
     title: Introduction
@@ -34,8 +35,9 @@ modules:
     path: sections/intro/course-03-how-this-course-is-made.md
 - id: module-010
   title: Configuration as Code (CaC)
-  description: Developed reading and reasoning for Configuration as Code (CaC).
-  maturity: alpha
+  description: Explains how a Deployment replaces pods during a rolling update and
+    how configuration declared as versioned input, with Kustomize, reaches every pod.
+  status: alpha
   content:
   - type: reading
     title: Configuration as Code (CaC)
@@ -50,29 +52,222 @@ modules:
     title: Calculating Rollout Capacity And Diagnosing Progress
     path: sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
   - type: reading
+    title: Rollback, History And Verification
+    path: sections/section-010/module-01/course-03-rollback-history-and-verification.md
+  - type: reading
     title: Summary
-    path: sections/section-010/module-01/course-03-summary.md
+    path: sections/section-010/module-01/course-04-summary.md
+  - type: reading
+    title: Repair A Stalled Rollout - Task
+    path: sections/section-010/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Repair A Stalled Rollout
+    path: sections/section-010/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 20m
+    topic: configuration-as-code
+    task_kind: build
+    learning_goals:
+    - Find why a rollout is stalled from the Deployment status, the ReplicaSets and
+      the events
+    - Repair the rollout and keep the capacity limits
+    tags:
+    - cgoa
+    - configuration-as-code
+    - deployment
+    - rollout
+    - readiness
+    - kubectl
+    resources:
+    - name: Deployments
+      url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+  - type: reading
+    title: Configuration As Versioned Input
+    path: sections/section-010/module-02/course.md
+  - type: reading
+    title: Configuration As Declared Input
+    path: sections/section-010/module-02/course-01-configuration-as-declared-input.md
+  - type: reading
+    title: How A Configuration Change Reaches Pods
+    path: sections/section-010/module-02/course-02-how-a-configuration-change-reaches-pods.md
+  - type: reading
+    title: Kustomize Overlays, Diff And Drift
+    path: sections/section-010/module-02/course-03-kustomize-overlays-diff-and-drift.md
+  - type: reading
+    title: Summary
+    path: sections/section-010/module-02/course-04-summary.md
+  - type: reading
+    title: Declare Scout Configuration With Kustomize And Remove Drift - Task
+    path: sections/section-010/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Declare Scout Configuration With Kustomize And Remove Drift
+    path: sections/section-010/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 30m
+    topic: configuration-as-code
+    task_kind: build
+    learning_goals:
+    - Declare the configuration of a service with a Kustomize overlay and a generated
+      ConfigMap
+    - Find and remove drift that an apply does not remove
+    tags:
+    - cgoa
+    - configuration-as-code
+    - kustomize
+    - configmap
+    - drift
+    - kubectl
+    resources:
+    - name: Declarative management with Kustomize
+      url: https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/
+  - type: reading
+    title: Deliver A Configuration Change Safely - Task
+    path: sections/section-010/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Deliver A Configuration Change Safely
+    path: sections/section-010/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 40m
+    topic: configuration-as-code
+    task_kind: build
+    learning_goals:
+    - Deliver a configuration change through a Kustomize overlay without losing capacity
+    - Keep a secret value in its Secret and record the live revision
+    tags:
+    - cgoa
+    - configuration-as-code
+    - kustomize
+    - rolling-update
+    - secret
+    - capstone
+    resources:
+    - name: Deployments
+      url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    - name: Declarative management with Kustomize
+      url: https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/
+  - type: quiz
+    title: 'Knowledge Check: Configuration as Code (CaC)'
+    path: sections/section-010/quiz.yaml
+    pass_score: 70
 - id: module-020
   title: Infrastructure as Code (IaC)
-  description: Developed reading and reasoning for Infrastructure as Code (IaC).
-  maturity: alpha
+  description: Shows how OpenTofu turns declared files into Kubernetes resources,
+    how to read a plan and a replacement, and how to detect drift, import existing
+    objects and place the tool next to GitOps.
+  status: alpha
   content:
   - type: reading
     title: Infrastructure as Code (IaC)
     path: sections/section-020/README.md
   - type: reading
-    title: Infrastructure Declarations, Plans And External Resource Lifecycle
+    title: Declarations, Plans And Resource Lifecycle
     path: sections/section-020/module-01/course.md
   - type: reading
-    title: Infrastructure Declarations, Plans And External Resource Lifecycle
-    path: sections/section-020/module-01/course-01-infrastructure-declarations-plans-and-external-resource-lifecycle.md
+    title: Declaring Resources With OpenTofu
+    path: sections/section-020/module-01/course-01-declaring-resources-with-opentofu.md
+  - type: reading
+    title: Reading Plans, Replacement And Lifecycle Rules
+    path: sections/section-020/module-01/course-02-reading-plans-replacement-and-lifecycle-rules.md
   - type: reading
     title: Summary
-    path: sections/section-020/module-01/course-02-summary.md
+    path: sections/section-020/module-01/course-03-summary.md
+  - type: reading
+    title: Declare A Hangar With OpenTofu - Task
+    path: sections/section-020/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Declare A Hangar With OpenTofu
+    path: sections/section-020/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 35m
+    topic: infrastructure-as-code
+    task_kind: build
+    learning_goals:
+    - Declare a namespace, a ConfigMap and a Deployment with OpenTofu
+    - Read a plan and protect a resource with a lifecycle rule
+    tags:
+    - cgoa
+    - infrastructure-as-code
+    - opentofu
+    - plan
+    - lifecycle
+    - kubernetes
+    resources:
+    - name: OpenTofu documentation
+      url: https://opentofu.org/docs/
+    - name: Kubernetes provider
+      url: https://registry.opentofu.org/providers/hashicorp/kubernetes/latest/docs
+  - type: reading
+    title: Drift, State And Reconciliation
+    path: sections/section-020/module-02/course.md
+  - type: reading
+    title: State, Drift And Detection
+    path: sections/section-020/module-02/course-01-state-drift-and-detection.md
+  - type: reading
+    title: Importing Resources And The GitOps Boundary
+    path: sections/section-020/module-02/course-02-importing-resources-and-the-gitops-boundary.md
+  - type: reading
+    title: Summary
+    path: sections/section-020/module-02/course-03-summary.md
+  - type: reading
+    title: Import Hand-Made Objects And Reconcile Drift - Task
+    path: sections/section-020/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Import Hand-Made Objects And Reconcile Drift
+    path: sections/section-020/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 40m
+    topic: infrastructure-as-code
+    task_kind: build
+    learning_goals:
+    - Import hand-made objects with import blocks and keep their identity
+    - Detect drift and reconcile it with a plan
+    tags:
+    - cgoa
+    - infrastructure-as-code
+    - opentofu
+    - import
+    - drift
+    - state
+    resources:
+    - name: Import
+      url: https://opentofu.org/docs/language/import/
+    - name: State
+      url: https://opentofu.org/docs/language/state/
+  - type: reading
+    title: Bring A Hand-Made Depot Under OpenTofu - Task
+    path: sections/section-020/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Bring A Hand-Made Depot Under OpenTofu
+    path: sections/section-020/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 60m
+    topic: infrastructure-as-code
+    task_kind: build
+    learning_goals:
+    - Bring a hand-made namespace under OpenTofu without recreating its objects
+    - Remove drift and protect the critical resource
+    tags:
+    - cgoa
+    - infrastructure-as-code
+    - opentofu
+    - import
+    - drift
+    - prevent-destroy
+    - capstone
+    resources:
+    - name: Import
+      url: https://opentofu.org/docs/language/import/
+    - name: Lifecycle
+      url: https://opentofu.org/docs/language/meta-arguments/lifecycle/
+  - type: quiz
+    title: 'Knowledge Check: Infrastructure as Code (IaC)'
+    path: sections/section-020/quiz.yaml
+    pass_score: 70
 - id: module-030
   title: DevOps and DevSecOps
-  description: Developed reading and reasoning for DevOps and DevSecOps.
-  maturity: alpha
+  description: Turns shared ownership into platform objects, namespaces, access rules
+    and limits, and shows which security checks belong in the delivery path.
+  status: alpha
   content:
   - type: reading
     title: DevOps and DevSecOps
@@ -81,15 +276,112 @@ modules:
     title: Shared Ownership, Feedback And Platform Enablement
     path: sections/section-030/module-01/course.md
   - type: reading
-    title: Shared Ownership, Feedback And Platform Enablement
-    path: sections/section-030/module-01/course-01-shared-ownership-feedback-and-platform-enablement.md
+    title: Ownership Boundaries With Namespaces And RBAC
+    path: sections/section-030/module-01/course-01-ownership-boundaries-with-namespaces-and-rbac.md
+  - type: reading
+    title: Supported Limits And Actionable Feedback
+    path: sections/section-030/module-01/course-02-supported-limits-and-actionable-feedback.md
   - type: reading
     title: Summary
-    path: sections/section-030/module-01/course-02-summary.md
+    path: sections/section-030/module-01/course-03-summary.md
+  - type: reading
+    title: Build A Platform Contract For An Application Team - Task
+    path: sections/section-030/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Build A Platform Contract For An Application Team
+    path: sections/section-030/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 35m
+    topic: devops-and-devsecops
+    task_kind: build
+    learning_goals:
+    - Give a team access that is limited to its namespace
+    - Set a quota, default limits and an owner label
+    tags:
+    - cgoa
+    - devops-and-devsecops
+    - rbac
+    - resourcequota
+    - limitrange
+    - platform
+    resources:
+    - name: Using RBAC authorization
+      url: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+    - name: Resource quotas
+      url: https://kubernetes.io/docs/concepts/policy/resource-quotas/
+  - type: reading
+    title: Security Checks In The Delivery Path
+    path: sections/section-030/module-02/course.md
+  - type: reading
+    title: Pod Security Admission And Security Contexts
+    path: sections/section-030/module-02/course-01-pod-security-admission-and-security-contexts.md
+  - type: reading
+    title: Least-Privilege Deployment Identities And Secrets
+    path: sections/section-030/module-02/course-02-least-privilege-deployment-identities-and-secrets.md
+  - type: reading
+    title: Summary
+    path: sections/section-030/module-02/course-03-summary.md
+  - type: reading
+    title: Enforce Pod Security And Restrict The Deployer - Task
+    path: sections/section-030/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Enforce Pod Security And Restrict The Deployer
+    path: sections/section-030/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 40m
+    topic: devops-and-devsecops
+    task_kind: build
+    learning_goals:
+    - Enforce the restricted Pod Security level and repair an unsafe workload
+    - Limit a deployment identity and read a secret by reference
+    tags:
+    - cgoa
+    - devops-and-devsecops
+    - pod-security
+    - security-context
+    - rbac
+    - secret
+    resources:
+    - name: Pod Security Admission
+      url: https://kubernetes.io/docs/concepts/security/pod-security-admission/
+    - name: Configure a security context
+      url: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  - type: reading
+    title: Bring A Bay To A Safe Supported State - Task
+    path: sections/section-030/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Bring A Bay To A Safe Supported State
+    path: sections/section-030/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 60m
+    topic: devops-and-devsecops
+    task_kind: build
+    learning_goals:
+    - Bring a namespace to a supported state with limits, Pod Security and access
+      rules
+    - Record the result of the platform checks
+    tags:
+    - cgoa
+    - devops-and-devsecops
+    - rbac
+    - resourcequota
+    - pod-security
+    - secret
+    - capstone
+    resources:
+    - name: Pod Security Admission
+      url: https://kubernetes.io/docs/concepts/security/pod-security-admission/
+    - name: Using RBAC authorization
+      url: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+  - type: quiz
+    title: 'Knowledge Check: DevOps and DevSecOps'
+    path: sections/section-030/quiz.yaml
+    pass_score: 70
 - id: module-040
   title: CI and CD
-  description: Developed reading and reasoning for CI and CD.
-  maturity: alpha
+  description: Describes what a build pipeline proves, how a release is identified
+    by an image digest, and how one artifact is promoted, gated and rolled back.
+  status: alpha
   content:
   - type: reading
     title: CI and CD
@@ -101,8 +393,101 @@ modules:
     title: Source Changes And Build Evidence
     path: sections/section-040/module-01/course-01-source-changes-and-build-evidence.md
   - type: reading
-    title: Delivery, Deployment And Promotion Decisions
-    path: sections/section-040/module-01/course-02-delivery-deployment-and-promotion-decisions.md
+    title: Delivery, Deployment And Release Identity
+    path: sections/section-040/module-01/course-02-delivery-deployment-and-release-identity.md
   - type: reading
     title: Summary
     path: sections/section-040/module-01/course-03-summary.md
+  - type: reading
+    title: Release An Artifact With Verifiable Evidence - Task
+    path: sections/section-040/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Release An Artifact With Verifiable Evidence
+    path: sections/section-040/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 30m
+    topic: ci-and-cd
+    task_kind: build
+    learning_goals:
+    - Record a release with the image digest and a change cause
+    - Verify the record against the running pods
+    tags:
+    - cgoa
+    - ci-and-cd
+    - release
+    - digest
+    - rollout
+    - kubectl
+    resources:
+    - name: Deployments
+      url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    - name: Images
+      url: https://kubernetes.io/docs/concepts/containers/images/
+  - type: reading
+    title: Promotion, Delivery And Rollback
+    path: sections/section-040/module-02/course.md
+  - type: reading
+    title: Promoting One Artifact Through Environments
+    path: sections/section-040/module-02/course-01-promoting-one-artifact-through-environments.md
+  - type: reading
+    title: Gates, Rollback And Pull-Based Delivery
+    path: sections/section-040/module-02/course-02-gates-rollback-and-pull-based-delivery.md
+  - type: reading
+    title: Summary
+    path: sections/section-040/module-02/course-03-summary.md
+  - type: reading
+    title: Roll Back A Failed Release And Promote Correctly - Task
+    path: sections/section-040/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Roll Back A Failed Release And Promote Correctly
+    path: sections/section-040/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 35m
+    topic: ci-and-cd
+    task_kind: build
+    learning_goals:
+    - Roll back a failed release
+    - Promote the same artifact to production and keep each environment's settings
+    tags:
+    - cgoa
+    - ci-and-cd
+    - rollback
+    - promotion
+    - rollout
+    - kubectl
+    resources:
+    - name: Rolling back a Deployment
+      url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment
+  - type: reading
+    title: Recover Production And Promote A Release With Evidence - Task
+    path: sections/section-040/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Recover Production And Promote A Release With Evidence
+    path: sections/section-040/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 60m
+    topic: ci-and-cd
+    task_kind: build
+    learning_goals:
+    - Recover production from a failed release
+    - Promote a release with the same digest and write the release record
+    tags:
+    - cgoa
+    - ci-and-cd
+    - rollback
+    - promotion
+    - digest
+    - capstone
+    resources:
+    - name: Deployments
+      url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    - name: Images
+      url: https://kubernetes.io/docs/concepts/containers/images/
+  - type: quiz
+    title: 'Knowledge Check: CI and CD'
+    path: sections/section-040/quiz.yaml
+    pass_score: 70
+  - type: quiz
+    title: 'Final Knowledge Check: Related Practices'
+    path: sections/final-domain-quiz.yaml
+    pass_score: 70

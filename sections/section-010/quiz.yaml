@@ -1,0 +1,288 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats066-010
+course_id: ATS066
+exam_code: CGOA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Configuration as Code (CaC)"
+questions:
+  - id: ats066-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Identify the changes that create a Deployment revision"
+    source_readings:
+      - sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+    prompt: "A team runs `kubectl scale deployment scout --replicas=6` and then `kubectl set image deployment/scout scout=ghcr.io/stefanprodan/podinfo:6.15.1`. How many new revisions do these two commands create?"
+    options:
+      - id: a
+        text: "Two, because every command changes the Deployment."
+        explanation: "A scale change updates the replica count only. The Deployment keeps the same ReplicaSet, so no new revision appears."
+      - id: b
+        text: "None, because revisions are only created by `kubectl rollout restart`."
+        explanation: "A restart is one way to change the pod template, but any change to the template creates a revision, including a new image."
+      - id: c
+        text: "One, because only the image change alters the pod template."
+        explanation: "Correct. A new revision follows a change of `.spec.template`. A change of the replica count does not touch the template."
+      - id: d
+        text: "One, because the second command replaces the first one."
+        explanation: "The two commands change different fields. The scale command is not replaced; it simply creates no revision."
+    correct_option: c
+    explanation: "A revision is a ReplicaSet for one pod template. Changing the image changes the template; changing replicas does not."
+
+  - id: ats066-010-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Calculate surge and unavailability limits with the default values"
+    source_readings:
+      - sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+    prompt: "A Deployment has 10 replicas and the default rolling update values of 25 percent for `maxSurge` and `maxUnavailable`. What are the largest number of pods that may exist and the smallest number of available pods during the rollout?"
+    options:
+      - id: a
+        text: "13 pods at most and 8 available at least."
+        explanation: "Correct. 25 percent of 10 is 2.5. `maxSurge` rounds up to 3, so 13 pods may exist. `maxUnavailable` rounds down to 2, so at least 8 must stay available."
+      - id: b
+        text: "12 pods at most and 8 available at least."
+        explanation: "`maxSurge` rounds up, not down. 2.5 becomes 3, not 2, so the limit is 13."
+      - id: c
+        text: "13 pods at most and 7 available at least."
+        explanation: "`maxUnavailable` rounds down, not up. 2.5 becomes 2, so at least 8 pods stay available."
+      - id: d
+        text: "12 pods at most and 7 available at least."
+        explanation: "Both roundings are reversed. `maxSurge` rounds up and `maxUnavailable` rounds down."
+    correct_option: a
+    explanation: "maxSurge rounds up and maxUnavailable rounds down: 10 + 3 = 13 pods at most, 10 - 2 = 8 available at least."
+
+  - id: ats066-010-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain readiness and capacity effects on a rollout"
+    source_readings:
+      - sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+    prompt: "A Deployment has 4 replicas, `maxSurge: 1` and `maxUnavailable: 0`. The new version has a readiness probe on a path that returns 404. What does the cluster look like some minutes later?"
+    options:
+      - id: a
+        text: "The four old pods are replaced one by one, and all of them are unready."
+        explanation: "With `maxUnavailable: 0` an old pod is only removed after a new pod is ready. A new pod that is never ready cannot take the place of an old one."
+      - id: b
+        text: "The four old pods still serve traffic, one new pod runs but is not ready, and the rollout is stuck."
+        explanation: "Correct. The controller may add one pod. That pod never becomes ready, so no old pod may be removed and the rollout does not progress."
+      - id: c
+        text: "The controller has rolled back to the old version on its own."
+        explanation: "The Deployment controller never rolls back by itself. It stops making progress and reports it."
+      - id: d
+        text: "All four old pods are gone and four new pods run without traffic."
+        explanation: "`maxUnavailable: 0` forbids removing old capacity before new pods are ready, so the old pods stay."
+    correct_option: b
+    explanation: "With zero unavailable pods allowed, an unready new pod blocks the rollout and the old pods keep serving."
+
+  - id: ats066-010-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Distinguish a reported progress failure from automatic recovery"
+    source_readings:
+      - sections/section-010/module-01/course-02-calculating-rollout-capacity-and-diagnosing-progress.md
+    prompt: "The `progressDeadlineSeconds` of a stuck rollout has passed. What happens to the Deployment?"
+    options:
+      - id: a
+        text: "The Progressing condition turns false with the reason `ProgressDeadlineExceeded`, and the rollout is not undone."
+        explanation: "Correct. The controller reports the failure in the condition. Rolling back is a decision for a person or a delivery tool."
+      - id: b
+        text: "The controller deletes the new ReplicaSet and scales the old one back up."
+        explanation: "The controller does not undo a rollout on its own. The new ReplicaSet stays."
+      - id: c
+        text: "The Deployment is paused and no change is accepted any more."
+        explanation: "The deadline does not pause the Deployment. You can still fix the spec, and the controller continues."
+      - id: d
+        text: "The failed pods are restarted with a longer deadline."
+        explanation: "The controller does not change the deadline. It only reports that the time has run out."
+    correct_option: a
+    explanation: "The deadline only reports a stalled rollout in the Progressing condition. It never triggers a rollback."
+
+  - id: ats066-010-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what `minReadySeconds` adds to a readiness probe"
+    source_readings:
+      - sections/section-010/module-01/course-01-rolling-updates-and-health-gates.md
+    prompt: "What does `minReadySeconds: 30` change in a rolling update?"
+    options:
+      - id: a
+        text: "The kubelet waits 30 seconds before it starts the first probe."
+        explanation: "That is the job of `initialDelaySeconds` on the probe. `minReadySeconds` belongs to the Deployment."
+      - id: b
+        text: "A new pod must stay ready for 30 seconds before it counts as available."
+        explanation: "Correct. The rollout only goes on when the new pod is available, which means ready for the full time without a crash."
+      - id: c
+        text: "The controller waits 30 seconds between two Deployments."
+        explanation: "The setting is about one pod becoming available, not about the order of different Deployments."
+      - id: d
+        text: "A pod is killed if it takes longer than 30 seconds to become ready."
+        explanation: "That is not the meaning. The deadline for a stalled rollout is `progressDeadlineSeconds`."
+    correct_option: b
+    explanation: "minReadySeconds is how long a pod must stay ready before it is counted as available."
+
+  - id: ats066-010-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what a rollback restores"
+    source_readings:
+      - sections/section-010/module-01/course-03-rollback-history-and-verification.md
+    prompt: "A new image broke `scout`. The team runs `kubectl rollout undo deployment/scout`. What does the command restore?"
+    options:
+      - id: a
+        text: "The pod template of the previous revision, and it records it as a new revision."
+        explanation: "Correct. Undo copies the previous pod template back into the Deployment. The old revision number is reused as a new, higher one."
+      - id: b
+        text: "The whole Deployment spec, including the replica count and the strategy."
+        explanation: "Only the pod template comes back. Fields outside the template, such as `replicas`, stay as they are."
+      - id: c
+        text: "The contents of every ConfigMap that the old pods used."
+        explanation: "A ConfigMap is a separate object. Undo does not change it."
+      - id: d
+        text: "The state of the cluster at the time of the old revision."
+        explanation: "There is no snapshot of the cluster. Only the pod template of the older ReplicaSet is reused."
+    correct_option: a
+    explanation: "Undo restores the previous pod template. Other fields and other objects are not part of it."
+
+  - id: ats066-010-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Distinguish a ConfigMap from a Secret"
+    source_readings:
+      - sections/section-010/module-02/course-01-configuration-as-declared-input.md
+    prompt: "A team stores a token in a Secret and says that the value is now encrypted. What is wrong with the claim?"
+    options:
+      - id: a
+        text: "Nothing is wrong: a Secret is always encrypted in the API."
+        explanation: "Not by default. Encryption at rest is a cluster setting that is not on in every cluster."
+      - id: b
+        text: "The value is only base64 encoded, so anyone who can read the Secret can decode it."
+        explanation: "Correct. Base64 is an encoding, not encryption. Access control and encryption at rest protect the value, not the format."
+      - id: c
+        text: "A Secret is stored as plain text in the pod and cannot be changed."
+        explanation: "A Secret can be changed like any object. The value in the API is base64 encoded."
+      - id: d
+        text: "A Secret can only be read by the pod that mounts it."
+        explanation: "Anyone with `get` on the Secret can read it, and any pod in the namespace may mount it if the policy allows."
+    correct_option: b
+    explanation: "Base64 is not encryption. Control who can read the Secret and enable encryption at rest."
+
+  - id: ats066-010-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain how a configuration change reaches the pods"
+    source_readings:
+      - sections/section-010/module-02/course-02-how-a-configuration-change-reaches-pods.md
+    prompt: "A pod reads `PODINFO_UI_MESSAGE` from a ConfigMap with `valueFrom.configMapKeyRef`. Someone edits the ConfigMap in place. What does the running pod show?"
+    options:
+      - id: a
+        text: "The new value after the kubelet refresh, about a minute later."
+        explanation: "Only files from a mounted volume are refreshed by the kubelet. An environment variable is not."
+      - id: b
+        text: "The new value at once, because the pod reads the ConfigMap on every request."
+        explanation: "The application gets the value once, from its environment. It does not read the API."
+      - id: c
+        text: "A crash, because the key changed under the container."
+        explanation: "Nothing happens to the container. It does not see the change."
+      - id: d
+        text: "The old value, until the container starts again."
+        explanation: "Correct. Environment variables are fixed when the container starts. A new pod or a restart picks up the new value."
+    correct_option: d
+    explanation: "Environment variables are set at container start, so a running pod keeps the old value."
+
+  - id: ats066-010-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain which mounted files update and which never do"
+    source_readings:
+      - sections/section-010/module-02/course-02-how-a-configuration-change-reaches-pods.md
+    prompt: "A ConfigMap is mounted as a volume. Which statement about updates is true?"
+    options:
+      - id: a
+        text: "Files from a normal volume mount are updated by the kubelet after a delay, but a `subPath` mount is never updated."
+        explanation: "Correct. The kubelet refreshes the files on its sync period. A `subPath` mount is a direct bind of one file and stays as it was."
+      - id: b
+        text: "All mounted files update at once and a `subPath` mount too."
+        explanation: "Not at once. The kubelet needs a sync period, and a `subPath` mount is excluded."
+      - id: c
+        text: "Mounted files never update; only environment variables do."
+        explanation: "It is the other way around: files update, environment variables do not."
+      - id: d
+        text: "Files update only when the ConfigMap is `immutable`."
+        explanation: "An immutable ConfigMap cannot be changed at all, so nothing can update."
+    correct_option: a
+    explanation: "Volume files follow the ConfigMap with a delay; a subPath mount is never refreshed."
+
+  - id: ats066-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain generated names with a content hash"
+    source_readings:
+      - sections/section-010/module-02/course-02-how-a-configuration-change-reaches-pods.md
+    prompt: "A `configMapGenerator` adds a hash to the ConfigMap name and rewrites the reference in the Deployment. Why does that help a rollout?"
+    options:
+      - id: a
+        text: "The hash encrypts the data in the ConfigMap."
+        explanation: "The hash is derived from the content. It does not encrypt anything."
+      - id: b
+        text: "The hash makes Kubernetes delete the old ConfigMap at once."
+        explanation: "The old ConfigMap is not deleted by the new name. It stays until something removes it."
+      - id: c
+        text: "The hash lets the ConfigMap grow beyond the size limit."
+        explanation: "The size limit of a ConfigMap does not change."
+      - id: d
+        text: "A change of the content gives a new name, so the pod template changes and a rolling update starts."
+        explanation: "Correct. The new name appears in the template, and a template change creates a new revision with the usual rollout limits."
+    correct_option: d
+    explanation: "A new content hash is a new name, so the pod template changes and the rollout starts."
+
+  - id: ats066-010-q11
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Add a label to every object without touching selectors"
+    source_readings:
+      - sections/section-010/module-02/course-03-kustomize-overlays-diff-and-drift.md
+    prompt: "An overlay must add the label `environment: outpost` to every object, but the selector of the Deployment must stay `app: scout`. Which setting does this?"
+    options:
+      - id: a
+        text: "`labels` with `includeSelectors: false`."
+        explanation: "Correct. The label goes on the metadata of each object. Selectors and template selectors stay as they are."
+      - id: b
+        text: "`commonLabels` with the pair `environment: outpost`."
+        explanation: "`commonLabels` is deprecated and it also writes into selectors. A Deployment selector is immutable, so an apply would fail."
+      - id: c
+        text: "A patch that deletes `matchLabels`."
+        explanation: "A Deployment needs a selector. Deleting it makes the object invalid."
+      - id: d
+        text: "`namePrefix: outpost-`."
+        explanation: "A prefix changes names, not labels."
+    correct_option: a
+    explanation: "Use labels with includeSelectors false, not the deprecated commonLabels."
+
+  - id: ats066-010-q12
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain why a hand-made change can survive an apply"
+    source_readings:
+      - sections/section-010/module-02/course-03-kustomize-overlays-diff-and-drift.md
+    prompt: "A Deployment was created with `kubectl create`, and someone added `PODINFO_UI_MESSAGE` to its `env` by hand. An overlay now sets the message through `envFrom` and is applied with `kubectl apply -k`. Which message do the pods show?"
+    options:
+      - id: a
+        text: "The overlay message, because apply replaces the whole object."
+        explanation: "Apply merges. It does not replace the object."
+      - id: b
+        text: "The overlay message, because `envFrom` always wins over `env`."
+        explanation: "It is the other way around: an entry in `env` wins over `envFrom`."
+      - id: c
+        text: "The hand-made message, because it was never in an applied manifest and an entry in `env` wins over `envFrom`."
+        explanation: "Correct. Without a last-applied record, the apply has no reason to remove the field, so the drift stays and the entry in `env` wins."
+      - id: d
+        text: "No message, because the two settings cancel each other."
+        explanation: "They do not cancel. One of the two values is used."
+    correct_option: c
+    explanation: "Apply only removes fields that an earlier apply wrote. The hand-made env entry stays and wins over envFrom."

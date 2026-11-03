@@ -203,20 +203,23 @@ The course covers **Related Practices**, worth **16%** of
 **Certified GitOps Associate (CGOA)**. It is part of **ATP013**.
 The official objectives are listed in `astrona.yaml` and mapped in `CURRICULUM.md`.
 
-### Reading-only scope
+### Hands-on scope
 
-The maintainer approved the lesson plan, asked for deeper teaching, and explicitly
-requested **no labs or playgrounds**. That instruction overrides shared examples
-about hands-on environments, graded labs and playground markers. Do not create
-runtime configurations, executable exercises or playground lifecycle markers.
-The course must be usable without a cluster or installed command-line tools.
+The maintainer lifted the earlier reading-only limit on 2026-11-03. The course now
+has a playground and a graded lab for every module, a capstone lab for every
+section, a quiz for every section and a final domain quiz. The shared rules in
+this file about playgrounds, labs, markers, links and plain English apply in full.
+Labs run on kind (Kubernetes 1.35, `kindest/node:v1.35.8`). The Related Practices
+tools are `kubectl`, Kustomize (built into `kubectl`) and OpenTofu on the
+learner's machine. Labs and playgrounds are built untested: static checks only
+(`astrona validate`, `bash -n`, YAML parsing). Do not claim that a lab ran.
 
 ### Teaching structure and depth
 
 Every section begins with its own introduction and measurable learning outcomes.
 Every module contains a landing page, developed teaching lessons and a final
 `# Summary` page. Put the summary after all its lessons and before the next
-module. This reading-only summary has no playground destruction marker.
+module. The summary ends with the playground destruction marker.
 
 Explain mechanisms, responsible components, realistic examples and the limits
 of each claim. Include worked reasoning and relevant failure cases. Avoid thin
@@ -248,4 +251,4 @@ The ATP registration remains draft until publication is approved.
 Primary author sources are recorded in `SOURCES.md`. The objective list was
 verified on 2026-10-11. Detailed reading expansions were written on 2026-10-11.
 Validate manifest paths, summary ordering, curriculum coverage and question
-contracts. Do not claim runtime verification for a reading-only course.
+contracts. Do not claim runtime verification: labs and playgrounds are untested.

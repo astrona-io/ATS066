@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Enforce Pod Security And Restrict The Deployer (LAB). Graded against the live cluster. Built untested.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-066-lab-030-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Create dockyard with an unsafe scout Deployment and a Secret
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the repaired Deployment, the identity and the namespace labels
+      type: file
+      source: solution/apply.sh
+    - name: wait-for-settled
+      description: Wait until exactly two scout pods are left
+      type: file
+      source: testing/wait-for-settled.sh
+
+validation:
+  scripts:
+    - name: deploy-identity-least-privilege
+      description: Scout-deploy can update only the Deployment scout in dockyard, cannot read Secrets, and has no token mounted by default.
+      type: file
+      source: validation/validate-deploy-identity-least-privilege.sh
+      hint: Name the Deployment in resourceNames for get, patch and update, and allow list and watch separately. Set automountServiceAccountToken to false.
+    - name: pod-security-enforced
+      description: The namespace dockyard enforces and warns at the restricted level.
+      type: file
+      source: validation/validate-pod-security-enforced.sh
+      hint: Set the labels pod-security.kubernetes.io/enforce and warn to restricted on the namespace dockyard.
+    - name: scout-available
+      description: Scout has two replicas, all available, with the original image.
+      type: file
+      source: validation/validate-scout-available.sh
+      hint: Keep the image and two replicas. Wait for the rollout to finish.
+    - name: scout-restricted
+      description: Two scout pods run with a restricted-compliant security context.
+      type: file
+      source: validation/validate-scout-restricted.sh
+      hint: Set runAsNonRoot, a numeric runAsUser, allowPrivilegeEscalation false, privileged false, capabilities drop ALL and seccompProfile RuntimeDefault.
+    - name: secret-by-reference
+      description: SCOUT_TOKEN refers to the Secret scout-token key token, and no ConfigMap or plain env value holds the token.
+      type: file
+      source: validation/validate-secret-by-reference.sh
+      hint: Use env with valueFrom.secretKeyRef for the Secret scout-token and the key token. Never write the value.
+
+teardown:
+  keepCluster: false
